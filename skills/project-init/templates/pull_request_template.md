@@ -1,6 +1,6 @@
 ## Context
 
-Closes #{{issue number}}
+{{`Closes #<issue number>` if the project links work to issues, otherwise delete this line}}
 
 ## Changes
 

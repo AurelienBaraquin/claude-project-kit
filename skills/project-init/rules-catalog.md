@@ -29,6 +29,13 @@ How to use it:
 | Accessibility | User-interface changes must meet WCAG 2.1 AA and keep the automated accessibility checks green. |
 | Performance | State a measurable budget before optimising, and verify it after. |
 
+## Boundaries
+
+| Answer | Rule |
+|---|---|
+| Protected areas `<paths>` | Do not modify `<paths>`: `<reason>`. |
+| Forbidden action `<action>` | Never `<action>`. |
+
 ## Process
 
 | Answer | Rule |
@@ -37,10 +44,13 @@ How to use it:
 | Direct commits on `main` | Commit directly to `main`, in small commits that each leave the tests green. |
 | Solo review | The owner merges pull requests; you do not. |
 | Team review | A pull request needs `<N>` approval(s) from someone other than its author before it is merged. |
+| Branch naming `<pattern>` | Branches are named `<pattern>`, for example `<example>`. |
 | Conventional Commits | Commits follow Conventional Commits (`feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `ci`, `perf`, `build`). |
-| No AI attribution | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; enforced by `.githooks/commit-msg` and `.claude/settings.json`. |
+| No AI attribution (no commit hook) | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; `.claude/settings.json` disables them. |
+| No AI attribution (with `.githooks/commit-msg`) | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; `.claude/settings.json` disables them and `.githooks/commit-msg` rejects them. |
 | Vendored skills (when `.claude/skills/` copies are generated) | The skills in `.claude/skills/` are copies of the claude-project-kit; update them with the kit's `install.sh --project .` and do not edit them in place. |
-| Docs check (when `.githooks/pre-commit` is generated) | The documentation check (`node scripts/check-docs.mjs`) runs before every commit and in CI; fix what it reports instead of bypassing it. |
+| Docs check (when `.githooks/pre-commit` is generated) | The documentation check (`node scripts/check-docs.mjs`) runs before every commit; fix what it reports instead of bypassing it. |
+| Docs check in CI (when `docs-check.yml` is generated) | The documentation check also runs in CI. |
 | Hook activation (when `.githooks/` is generated) | Enable the git hooks once per clone with `git config core.hooksPath .githooks`; Claude Code refuses `git commit` until they are active. |
 
 ## Working mode (exactly one)
