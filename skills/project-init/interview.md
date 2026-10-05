@@ -18,7 +18,7 @@ question*, not a guess). Ask in the user's language.
   (the repository, or the *Defaults* table of `rules-catalog.md`), then ask one round of at most
   4 questions among the topics with **no** basis — typically the purpose and scope when neither
   the invocation prompt nor a brief states them, success and team, tracking and review,
-  non-negotiables, commit attribution. The user amends the proposed defaults in the
+  non-negotiables, commit attribution, cloud or team use. The user amends the proposed defaults in the
   reflect-back step.
 - **Thorough** (larger project, or on request): go through phases A to D below.
 
@@ -57,6 +57,7 @@ Whatever the mode, a topic with no basis and no answer becomes an *Open question
 | CI: what runs, what blocks a merge? Do docs-only changes skip it? | Docs check job | no CI yet |
 | Definition of done? | PR checklist | none defined |
 | Release and versioning approach? | Optional section | no releases |
+| Will the project also be used in cloud sessions (claude.ai/code, mobile, routines) or by people who do not have this kit? | Personal skills are not loaded there; the day-to-day skills must be copied into the repository | the repository already has `.claude/skills/` with them, or local use only is stated |
 
 ## Phase D — Rules for the AI agent
 

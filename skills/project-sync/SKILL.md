@@ -42,6 +42,7 @@ gone because the code was deleted, remove or rewrite the sentence — do not rec
 | Lessons without a safeguard | Entries in `.assistant/lessons.md` whose "what now prevents it" is empty | Propose a test, lint rule, hook or CI check |
 | Open questions | Entries in `CLAUDE.md` that the code or the user has since answered | Resolve and remove, recording the answer where it belongs |
 | Enforcement is active | If `.githooks/` exists, `git config core.hooksPath` must print `.githooks`; `.claude/hooks/ensure-git-hooks.sh` must exist and be wired in `.claude/settings.json` | Activate the hook path, restore the missing files |
+| Vendored skills are current | For each folder in `.claude/skills/` that also exists in `~/.claude/skills/`, run `diff -r` between them, ignoring `*.test.mjs` | Offer to update the project's copies with the kit's `install.sh --project <root>`, and remind the user to commit |
 | Superseded ADRs | ADRs still marked Accepted whose subject was replaced | Mark them superseded via `adr-new` |
 
 ## 3. Report

@@ -98,6 +98,7 @@ Use the files in `templates/` (this skill's folder). Choose templates from the a
 | `pre-commit` | `.githooks/` is generated (offer it on its own if the user declined commit rules) | `.githooks/pre-commit` (executable) — runs `scripts/check-docs.mjs` before every commit |
 | `ensure-git-hooks.sh` | `.githooks/` is generated | `.claude/hooks/ensure-git-hooks.sh` (executable), wired in `.claude/settings.json` |
 | `settings.json` | user wants no AI attribution, or `.githooks/` is generated | `.claude/settings.json` — merge, never overwrite; keep the `attribution` block only if the user wants no AI attribution, and the `hooks` block only if `.githooks/` is generated |
+| `.claude/skills/` copies of `adr-new`, `project-sync`, `project-onboard` | the user will use the project in cloud sessions or with people who do not have the kit | run `<kit>/install.sh --project <project-root>`, where `<kit>` is two levels above the real path of this skill's folder (`realpath`); if `install.sh` is not there (skills installed with `--copy`), copy those three folders by hand, without `*.test.mjs` |
 | `docs-check.yml` | project uses GitHub Actions | `.github/workflows/docs-check.yml` |
 | `../project-sync/scripts/check-docs.mjs` | always | `scripts/check-docs.mjs` (or the layout's script folder) |
 
@@ -122,6 +123,13 @@ Rules when filling a template:
 
 ### 6. Verify
 Run `node scripts/check-docs.mjs`. Fix what it reports. Show the user the list of created files.
+
+### 6a. Skills for cloud sessions and teammates
+Personal skills (`~/.claude/skills`) are not loaded in cloud sessions or on another person's
+machine; a repository's own `.claude/skills/` is part of the clone and is. When the user chose
+cloud or team use, copy the day-to-day skills there (table above) and remind them to **commit**
+`.claude/skills/`. `project-init` and `project-adopt` stay personal: they run once, locally. The
+copies can fall behind the kit; `project-sync` reports it.
 
 ### 6b. Activate the hooks
 If `.githooks/` was generated, run `git config core.hooksPath .githooks` (the user asked for
