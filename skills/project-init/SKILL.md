@@ -40,6 +40,11 @@ cannot be known on day 1 (architecture, most decisions) is recorded later, as it
 Derive stack, layout, scripts (test/lint/build), CI, conventions, and existing ADRs. These become
 proposed answers, shown for confirmation, not questions.
 
+Also detect what the process answers will depend on, and record mismatches as *Open questions*
+rather than assuming: no git remote while the user wants issues and PRs (`git remote -v`), no
+CI while a docs check workflow is requested, no test script while "tests for all logic" is a
+rule, an existing `CLAUDE.md` or `.claude/settings.json` that must be merged, not replaced.
+
 ### 3. Interview
 Follow [interview.md](interview.md): phases A (context), B (technical), C (process), D (AI
 rules). Skip every question already answered. Conduct it in the user's language.
