@@ -1,6 +1,6 @@
 ---
 name: project-sync
-description: Audit a project's documentation against its code and fix drift — broken links, cited paths that no longer exist, malformed ADRs, architecture.md or the brief out of step with reality, decisions without an ADR, lessons without a safeguard, vendored skills behind the kit. Use before opening a PR, at the end of a work session, after structural changes, when joining an existing project, or when the user asks whether the docs are up to date.
+description: Audit a project's documentation against its code and fix drift — broken links, cited paths that no longer exist, malformed ADRs, architecture.md or the brief out of step with reality, surfaces (API, deployment, CI, tests, technologies…) with no document or a stale one, decisions without an ADR, lessons without a safeguard, vendored skills behind the kit. Use before opening a PR, at the end of a work session, after structural changes, when joining an existing project, or when the user asks whether the docs are up to date.
 ---
 
 # project-sync
@@ -32,8 +32,15 @@ gone because the code was deleted, remove or rewrite the sentence — do not rec
 
 ## 2. Judgement checks (read, compare, then decide)
 
+Everything that exists and that someone needs to build, run, test, ship, operate or use the
+project has one document, listed in `docs/README.md` and kept current. The surfaces to look for,
+and what each document must contain, are in [doc-surfaces.md](doc-surfaces.md).
+
 | Check | How | Fix |
 |---|---|---|
+| Every surface has a document | List the surfaces present using the *Signals* of [doc-surfaces.md](doc-surfaces.md) (routes, CLI, schema, queues, env vars, tests, CI files, `Dockerfile`/infra, auth, UI, technologies and services the code depends on); check each is covered by a document listed in `docs/README.md` | Write the missing document from verified facts, following the surface's *Must contain*, and add its row to the index. What you cannot verify becomes `Unknown:` with who can answer |
+| Documents are not stale | For each row of `docs/README.md`, compare the date of the last commit touching the document with the last commit touching what it *Covers* (`git log -1 --format=%cd -- <path>`); where the covered paths are newer, read both | Update the document to what the code does now |
+| The index is true | Every document under `docs/` (and the other documents the project relies on) has a row; every row's *Covers* and *Update when* are filled and point at paths that exist | Add, correct or remove rows |
 | `docs/brief.md` matches reality | Compare its scope, priorities and success criteria with what is built and with recent decisions in the log; look for features outside the stated scope, in-scope items abandoned, criteria no longer measured | Propose the update to the user; change the brief only once they agree, then record it with `adr-new` |
 | `docs/architecture.md` matches the tree | List top-level folders and the modules/routes/tables/events the doc names; look for new ones it omits and described ones that are gone | Update the doc to what exists — only what exists |
 | Decisions without a record | Skim recent `git log` and the decisions log for structural choices (new dependency, pattern, boundary) | Run `adr-new` for any that lack an ADR or log line |
@@ -56,4 +63,6 @@ script and the judgement checks.
 - Mechanical fixes and factual corrections: do them, in the current change.
 - Anything that changes a *decision*, a *rule* or the *brief*: propose it, and write it through
   `adr-new` or after the user agrees.
+- Writing a missing document or correcting a stale one is documentation work: do it, in the
+  current change, from facts you verified.
 - Do not invent documentation for things that do not exist.
