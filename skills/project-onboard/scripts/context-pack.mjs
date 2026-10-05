@@ -2,7 +2,7 @@
 // Read-only snapshot of a project's foundation documents and its state of play, so an agent that
 // is new to the project can orient itself in one call. Zero dependencies.
 //   node context-pack.mjs [rootDir]
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -101,15 +101,14 @@ export function gitState(root) {
   };
 }
 
+/** Errors and warnings of the project's docs check; a warning (a possibly stale document) still exits 0. */
 export function docsHealth(root) {
   if (!existsSync(path.join(root, 'scripts/check-docs.mjs'))) return { installed: false };
-  try {
-    execFileSync(process.execPath, ['scripts/check-docs.mjs'], { cwd: root, stdio: 'pipe', encoding: 'utf8' });
-    return { installed: true, problems: [] };
-  } catch (error) {
-    const lines = String(error.stderr ?? '').split('\n').filter((line) => line && !/documentation problem/.test(line));
-    return { installed: true, problems: lines };
-  }
+  const result = spawnSync(process.execPath, ['scripts/check-docs.mjs'], { cwd: root, encoding: 'utf8' });
+  const problems = String(result.stderr ?? '')
+    .split('\n')
+    .filter((line) => line.trim() && !/documentation problem/.test(line) && !/^A surface is covered/.test(line));
+  return { installed: true, problems };
 }
 
 export function collect(root) {
@@ -164,7 +163,7 @@ export function render(pack) {
   lines.push('', '## Documentation health');
   if (!pack.health.installed) lines.push('- no docs check installed (`scripts/check-docs.mjs`)');
   else if (pack.health.problems.length === 0) lines.push('- docs check passes');
-  else lines.push('- docs check reports problems — treat the affected statements with care:', ...pack.health.problems.slice(0, 10).map((p) => `  - ${p}`));
+  else lines.push('- docs check reports problems or warnings (possibly stale or undocumented) — treat the affected statements with care:', ...pack.health.problems.slice(0, 10).map((p) => `  - ${p}`));
 
   return `${lines.join('\n')}\n`;
 }

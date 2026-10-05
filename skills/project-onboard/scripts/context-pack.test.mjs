@@ -99,6 +99,11 @@ describe('a project without any foundation', () => {
 });
 
 describe('docs health', () => {
+  it('surfaces warnings printed by a check that still passes', () => {
+    put('scripts/check-docs.mjs', "console.error('warning: docs/api.md: possibly stale'); console.log('docs-check: no error (1 warning(s))');\n");
+    assert.deepEqual(collect(root).health, { installed: true, problems: ['warning: docs/api.md: possibly stale'] });
+  });
+
   it('surfaces problems reported by the project docs check', () => {
     put('scripts/check-docs.mjs', "console.error('CLAUDE.md:1: broken link -> x.md'); process.exit(1);\n");
     assert.deepEqual(collect(root).health, { installed: true, problems: ['CLAUDE.md:1: broken link -> x.md'] });
