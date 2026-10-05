@@ -87,6 +87,7 @@ Use the files in `templates/` (this skill's folder). Choose templates from the a
 | `pull_request_template.md` | project uses PRs | `.github/PULL_REQUEST_TEMPLATE.md` |
 | `issue-user-story.md` | project uses GitHub issues | `.github/ISSUE_TEMPLATE/user-story.md` |
 | `commit-msg` | user wants enforced commit rules | `.githooks/commit-msg` (make it executable) |
+| `pre-commit` | `.githooks/` is generated (offer it on its own if the user declined commit rules) | `.githooks/pre-commit` (executable) — runs `scripts/check-docs.mjs` before every commit |
 | `ensure-git-hooks.sh` | `.githooks/` is generated | `.claude/hooks/ensure-git-hooks.sh` (executable), wired in `.claude/settings.json` |
 | `settings.json` | user wants no AI attribution, or `.githooks/` is generated | `.claude/settings.json` — merge, never overwrite; keep the `attribution` block only if the user wants no AI attribution, and the `hooks` block only if `.githooks/` is generated |
 | `docs-check.yml` | project uses GitHub Actions | `.github/workflows/docs-check.yml` |

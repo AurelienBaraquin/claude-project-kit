@@ -39,6 +39,7 @@ How to use it:
 | Team review | A pull request needs `<N>` approval(s) from someone other than its author before it is merged. |
 | Conventional Commits | Commits follow Conventional Commits (`feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `ci`, `perf`, `build`). |
 | No AI attribution | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; enforced by `.githooks/commit-msg` and `.claude/settings.json`. |
+| Docs check (when `.githooks/pre-commit` is generated) | The documentation check (`node scripts/check-docs.mjs`) runs before every commit and in CI; fix what it reports instead of bypassing it. |
 | Hook activation (when `.githooks/` is generated) | Enable the git hooks once per clone with `git config core.hooksPath .githooks`; Claude Code refuses `git commit` until they are active. |
 
 ## Working mode (exactly one)
