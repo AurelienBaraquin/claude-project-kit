@@ -42,6 +42,7 @@ superseded, but never silently.
 
 | When | Do |
 |---|---|
+| You start on this project with no prior context (a new session, or you are a sub-agent) | Run the `project-onboard` skill before the task; it only reads |
 | You make or notice a structural choice (dependency, pattern, data model, boundary, tool, process) | Run the `adr-new` skill: an ADR if it is architectural, otherwise one dated line in `.assistant/decisions-log.md` |
 | Your change adds or moves a module, route, table, event, service or directory | Update `docs/architecture.md` in the same change |
 | The scope, priorities or success criteria change (the user says so, or the work shows the brief is wrong) | Propose the change, update `docs/brief.md` once the user agrees, and record it with `adr-new`; never edit the brief silently |
