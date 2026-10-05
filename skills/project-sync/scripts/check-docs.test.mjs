@@ -243,6 +243,14 @@ describe('coverage', () => {
     ]);
   });
 
+  it('requires each CI pipeline file to be covered, not just one of them', () => {
+    put('docs/README.md', indexOf(row('a.md', '`.github/workflows/docs-check.yml`')));
+    put('docs/a.md', '# a');
+    put('.github/workflows/docs-check.yml', 'name: docs');
+    put('.github/workflows/ci.yml', 'name: ci');
+    assert.deepEqual(runAll(root).errors, ['docs/README.md: CI not covered by any document -> .github/workflows/ci.yml']);
+  });
+
   it('recognises web-server, platform and infrastructure-as-code files as deployment', () => {
     put('docs/README.md', indexOf(row('a.md', '`README.md`')));
     put('docs/a.md', '# a');

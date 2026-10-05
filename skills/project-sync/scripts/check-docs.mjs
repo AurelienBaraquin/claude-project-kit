@@ -8,8 +8,8 @@
 //    deleted files the docs still mention
 // 3. ADR files are numbered without gaps or duplicates, carry a valid Status line, and a
 //    "Superseded by ADR-NNNN" status points to an ADR that exists
-// 4. coverage: every documentation surface (top-level folder, Dockerfile, compose file, CI
-//    pipeline, `.env.example`, API contract, schema or migrations) is listed in the "Covers" column
+// 4. coverage: every documentation surface (top-level folder, Dockerfile, compose file, each CI
+//    pipeline file, `.env.example`, API contract, schema or migrations) is listed in the "Covers" column
 //    of a document of the index (docs/README.md). Active only when that index has a Covers column.
 // 5. freshness: a document whose covered paths changed in several commits since the document
 //    last changed is reported as possibly stale (a warning by default)
@@ -216,7 +216,7 @@ const SURFACE_RULES = [
   { reason: 'deployment', unit: (f) => (/(^|\/)Dockerfile(\..+)?$/.test(f) ? f : null) },
   { reason: 'deployment', unit: (f) => (/(^|\/)(docker-compose|compose)([.-][^/]+)?\.ya?ml$/.test(f) ? f : null) },
   { reason: 'deployment', unit: (f) => (/(^|\/)(nginx\.conf|Caddyfile|Procfile|fly\.toml|vercel\.json|netlify\.toml|serverless\.ya?ml|Chart\.yaml)$|\.tf$/.test(f) ? f : null) },
-  { reason: 'CI', unit: (f) => (f.startsWith('.github/workflows/') ? '.github/workflows/' : null) },
+  { reason: 'CI', unit: (f) => (f.startsWith('.github/workflows/') ? f : null) },
   { reason: 'CI', unit: (f) => (f.startsWith('.circleci/') ? '.circleci/' : null) },
   { reason: 'CI', unit: (f) => (/^(\.gitlab-ci\.yml|Jenkinsfile|azure-pipelines\.yml)$/.test(f) ? f : null) },
   { reason: 'configuration', unit: (f) => (/(^|\/)\.env\.(example|sample)$/.test(f) ? f : null) },
