@@ -1,6 +1,6 @@
 # claude-project-kit
 
-Three Claude Code skills that give an AI agent what it needs to work coherently on a project, and
+Four Claude Code skills that give an AI agent what it needs to work coherently on a project, and
 keep that knowledge true as the project changes.
 
 The idea comes from a school project where an AI produced consistent, high-quality code. What
@@ -12,7 +12,8 @@ they were taken). This kit makes that setup reproducible and, above all, *living
 
 | Skill | When | What it does |
 |---|---|---|
-| `project-init` | once, at the start (or when adopting an existing repo) | Interviews you, then generates a minimal v0: `CLAUDE.md`, `docs/architecture.md`, ADR template, decisions and lessons logs, PR/issue templates, commit hook, docs check |
+| `project-init` | once, at the start of a new (or near-empty) project | Interviews you, then generates a minimal v0: `CLAUDE.md`, `docs/architecture.md`, ADR template, decisions and lessons logs, PR/issue templates, commit hook, docs check |
+| `project-adopt` | when taking over an existing codebase you did not write or have not touched for a while | Reconstructs what exists from the code and its history (a fact collector script, then targeted reading), measures a health baseline, confirms intent with you, then sets up the same living foundation as `project-init` plus a dated takeover report |
 | `adr-new` | every time a decision is made | Records it as an ADR or a dated log line, in the same change as the code |
 | `project-sync` | before a PR, at the end of a session | Audits the docs against the code and fixes drift |
 
@@ -63,6 +64,7 @@ limit: a directory cited without a trailing `/` is not checked.
 
 ```bash
 node --test skills/project-sync/scripts/check-docs.test.mjs   # its tests
+node --test skills/project-adopt/scripts/recon.test.mjs       # the fact collector's tests
 ```
 
 ## Layout
@@ -70,6 +72,7 @@ node --test skills/project-sync/scripts/check-docs.test.mjs   # its tests
 ```
 skills/
   project-init/   SKILL.md · interview.md · rules-catalog.md · templates/
+  project-adopt/  SKILL.md · scripts/recon.mjs (+ tests) · templates/takeover-report.md
   adr-new/        SKILL.md
   project-sync/   SKILL.md · scripts/check-docs.mjs (+ tests)
 install.sh
