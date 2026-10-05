@@ -40,14 +40,26 @@ project"*. Afterwards the protocol in `CLAUDE.md` makes the agent reach for `adr
 
 `CLAUDE.md` · `docs/architecture.md` · `docs/adr/0000-template.md` · `.assistant/decisions-log.md` ·
 `.assistant/lessons.md` · `.github/PULL_REQUEST_TEMPLATE.md` · `.github/ISSUE_TEMPLATE/user-story.md` ·
-`.githooks/commit-msg` · `.claude/settings.json` · `.github/workflows/docs-check.yml` ·
-`scripts/check-docs.mjs`
+`.githooks/commit-msg` · `.githooks/pre-commit` · `.claude/settings.json` ·
+`.claude/hooks/ensure-git-hooks.sh` · `.github/workflows/docs-check.yml` · `scripts/check-docs.mjs`
+
+## Enforcement, not just instructions
+
+Rules that must hold are enforced by mechanisms that travel with the repository:
+
+- `commit-msg` rejects non-conforming commit messages and AI attribution lines;
+- `pre-commit` runs the docs check, so drift is caught the moment it is introduced;
+- `.claude/settings.json` hides AI attribution and wires `ensure-git-hooks.sh`, which makes
+  Claude Code refuse `git commit` until `git config core.hooksPath .githooks` has been run in
+  that clone (`project-init` runs it once).
 
 ## The docs check
 
 `skills/project-sync/scripts/check-docs.mjs` is dependency-free (Node ≥ 18). It verifies relative
 Markdown links, the paths cited in `CLAUDE.md` and `docs/architecture.md`, and ADR numbering and
 status. Configure it with `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`, `ignorePaths`).
+`--version` prints its version; `project-sync` offers to update an older copy in a project. Known
+limit: a directory cited without a trailing `/` is not checked.
 
 ```bash
 node --test skills/project-sync/scripts/check-docs.test.mjs   # its tests
@@ -57,7 +69,7 @@ node --test skills/project-sync/scripts/check-docs.test.mjs   # its tests
 
 ```
 skills/
-  project-init/   SKILL.md · interview.md · templates/
+  project-init/   SKILL.md · interview.md · rules-catalog.md · templates/
   adr-new/        SKILL.md
   project-sync/   SKILL.md · scripts/check-docs.mjs (+ tests)
 install.sh
