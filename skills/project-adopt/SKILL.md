@@ -80,6 +80,10 @@ Write up, labelling Fact / Inference / Unknown:
 - **Structure**: the module map
 - **Runtime and flows**: how it starts, the main paths through it
 - **Data** and **external dependencies**
+- **Surfaces present**: which of those in [../project-sync/doc-surfaces.md](../project-sync/doc-surfaces.md)
+  exist here, judged by their *Signals* (interfaces, data, configuration, tests, CI, deployment,
+  operations, security, user interface, technologies and services), and which already have a
+  document
 - **Conventions observed**, each with example paths and how consistently it is followed
 - **Implicit decisions**: the decision, its evidence, "rationale: unknown"
 - **Health baseline** and **risks or debt** (no tests, tracked secrets, dead code, hotspots, large
@@ -106,8 +110,8 @@ Ask only what the code cannot say, in rounds of at most 4 questions:
 Show what will be written, not a paraphrase: the module map; the **brief** (purpose, scope,
 priorities, success criteria); the **exact text of the numbered hard rules** (from the
 catalogue); the decisions to record and how (ADR when the user gave the rationale, log line
-"rationale unknown" otherwise); the risks and debt; the open questions; the files to be created
-or merged. Wait for validation.
+"rationale unknown" otherwise); the surface documents to be created; the risks and debt; the open
+questions; the files to be created or merged. Wait for validation.
 
 ### 7. Generate
 Follow the generation step of [../project-init/SKILL.md](../project-init/SKILL.md) (templates,
@@ -125,6 +129,14 @@ specifics:
   folder's role, runtime and flows, data model, external dependencies, how to run and test,
   conventions in place. Add a section only for something that exists; every path it cites must
   exist.
+- **Surface documents and `docs/README.md`** — for every surface present, one document from
+  verified facts, following that surface's *Must contain* in `doc-surfaces.md`: interfaces, data
+  model, configuration, how to run, tests, CI, deployment, operations, security, user guide,
+  technologies and services. Everything the code cannot tell (how it is really deployed, who
+  owns an environment, why a service is used) is written as `Unknown:` with who can answer, and
+  recorded as an open question. List every document in the `docs/README.md` index (*Covers* and
+  *Update when* filled). Where a document already exists, check it against the code and correct
+  it instead of rewriting it.
 - **Decisions** — an ADR only where the user supplied the rationale, following the retroactive
   procedure of the `adr-new` skill. Otherwise add to `.assistant/decisions-log.md`:
   `YYYY-MM-DD — observed in code: <decision> — rationale unknown (evidence: <path>)`.
@@ -137,7 +149,7 @@ specifics:
 
 ### 8. Verify
 Run `node scripts/check-docs.mjs`, then the judgement checks of the `project-sync` skill
-(architecture against the tree in particular). Activate the git hooks if they were generated
+(architecture against the tree and the coverage of every surface in particular). Activate the git hooks if they were generated
 (see the hooks step of `project-init`) and, when cloud or team use was chosen, copy the
 day-to-day skills into the repository (see the skills step of `project-init`).
 
