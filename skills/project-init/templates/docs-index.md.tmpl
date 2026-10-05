@@ -1,0 +1,15 @@
+# Documentation index
+
+Every surface of this project — anything someone needs to know to build, run, test, ship, operate
+or use it — has one document, listed here. A document is updated in the same change as what it
+covers. What each kind of document must contain is described by the `project-sync` skill
+(`doc-surfaces.md`).
+
+| Document | What it answers | Covers | Update when |
+|---|---|---|---|
+| [brief.md](brief.md) | What to build and why: purpose, scope, priorities, success criteria | the intent of the project | the scope, priorities or success criteria change |
+| [architecture.md](architecture.md) | How the code is organised and how its parts fit together | {{top-level folders, each in a code span}} | a module, folder, flow or convention is added, moved or removed |
+| [adr/](adr/) | Why the structural choices were made | decisions | a structural decision is made or reversed |
+| [decisions-log.md](../.assistant/decisions-log.md) | Smaller choices and their reasons | decisions | a smaller choice is made |
+| [lessons.md](../.assistant/lessons.md) | Mistakes made and what now prevents them | lessons | review, CI or the user catches a mistake |
+{{one row per additional document that exists now, with its covered paths in code spans}}

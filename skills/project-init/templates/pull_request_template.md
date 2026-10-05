@@ -22,5 +22,5 @@
 coverage threshold · lint/format/typecheck green · CI green · build artifact · documentation
 updated · demonstrable}}
 
-- [ ] `docs/architecture.md` updated if the structure changed (or N/A with a reason)
+- [ ] Documentation updated for every surface this change touches — see `docs/README.md` (or N/A with a reason)
 - [ ] `project-sync` run, nothing left to fix

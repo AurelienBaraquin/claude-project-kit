@@ -43,6 +43,7 @@ Whatever the mode, a topic with no basis and no answer becomes an *Open question
 | Stack and runtime versions? | Commands, strictness rules | manifests answer it |
 | Where does it run (local, VPS, cloud, containers)? | Deployment notes, what "done" means | nothing to deploy |
 | Data stores, external services? | Boundaries to document | detectable |
+| Technologies, services or tools a newcomer would not guess from the code? | `docs/technologies.md` | none, or detectable from manifests |
 | Non-negotiables: security, privacy/GDPR, accessibility, performance, i18n? | Hard rules and early oracles | none apply |
 | Quality bars: strict typing, coverage threshold, lint/format? | Hard rules the agent must respect | config files answer it |
 | Existing code to keep, ignore or never touch? | Protects frozen or legacy areas | greenfield |

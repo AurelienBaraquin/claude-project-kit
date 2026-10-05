@@ -89,6 +89,13 @@ repository or the outside world: ask first.`
 - Do what the task asks, nothing more.
 - Read a file fully before editing it.
 - Never state something about the code you have not verified in the code.
+- Documentation is part of done: a change is not finished until the documents that describe what
+  it touched are updated, in the same change.
+- Everything that exists and that someone needs to build, run, test, ship, operate or use the
+  project has one document, listed in `docs/README.md`. A new surface (interface, data model,
+  service, technology, pipeline, environment, command, configuration variable) gets its document
+  in the change that introduces it. Keep one home per fact: link, do not copy, and prefer a
+  generated reference when the code is the source of truth.
 
 ## Defaults (used by the quick mode, always shown to the user for correction)
 

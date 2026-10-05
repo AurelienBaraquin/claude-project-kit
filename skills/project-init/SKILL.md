@@ -24,7 +24,8 @@ cannot be known on day 1 (architecture, most decisions) is recorded later, as it
    an unchecked box means: *unchecked = the agent asks first*, never "forbidden" by inference.
 4. **Reflect back before writing.** Summarise what you understood and get a yes.
 5. **Minimal v0.** Fewer, true files beat many speculative ones. A short `CLAUDE.md` (≤ 100
-   lines) is a feature.
+   lines) is a feature. Minimal means no speculative file; it never means leaving something that
+   already exists undocumented (see step 5b).
 6. **Idempotent and non-destructive.** If a target file exists, show what would change and ask;
    never overwrite silently.
 7. **Teach the loop.** The generated `CLAUDE.md` must contain the *Living documentation
@@ -75,6 +76,7 @@ Show what will actually be written, not a paraphrase:
 - the **brief**: purpose, users, scope in and out, priorities, success criteria, constraints;
 - the **exact text of the numbered hard rules** (built from [rules-catalog.md](rules-catalog.md),
   defaults marked as such);
+- the surface documents to be created (step 5b);
 - the open questions;
 - the list of files that will be created or merged.
 
@@ -88,6 +90,7 @@ Use the files in `templates/` (this skill's folder). Choose templates from the a
 |---|---|---|
 | `CLAUDE.md.tmpl` | always | `CLAUDE.md` |
 | `brief.md.tmpl` | always | `docs/brief.md` |
+| `docs-index.md.tmpl` | always | `docs/README.md` |
 | `architecture.md.tmpl` | always | `docs/architecture.md` |
 | `adr-template.md` | always | `docs/adr/0000-template.md` |
 | `decisions-log.md` | always | `.assistant/decisions-log.md` |
@@ -121,6 +124,18 @@ Rules when filling a template:
 - Fill `docs/architecture.md` only with what *exists* (layout, conventions already in place).
   Describe nothing that is not built yet.
 
+### 5b. Surface documents
+Everything that exists and that someone needs to build, run, test, ship, operate or use the
+project has one document. For each surface of [../project-sync/doc-surfaces.md](../project-sync/doc-surfaces.md)
+whose *Signals* are present in the repository **now**, create its document from verified facts,
+following that surface's *Must contain*, and add its row to `docs/README.md` (*Document*, *What it
+answers*, *Covers*, *Update when*). Keep each short; what you cannot verify becomes `Unknown:` plus
+an open question.
+
+A project with nothing built yet gets none of these: each is created in the change that introduces
+its surface, which is what the protocol in `CLAUDE.md` asks of the agent. Never write a document
+for a surface that does not exist.
+
 ### 6. Verify
 Run `node scripts/check-docs.mjs`. Fix what it reports. Show the user the list of created files.
 
@@ -141,5 +156,6 @@ clone needs the same command. The `ensure-git-hooks.sh` hook makes Claude Code r
 - Do **not** commit unless asked; propose a branch name and commit message following the
   project's own conventions.
 - State clearly: "From now on, follow the Living documentation protocol in `CLAUDE.md`: record
-  decisions with `adr-new`, keep `docs/architecture.md` true, run `project-sync` before PRs."
+  decisions with `adr-new`, document every surface you add or change in the same change (index in
+  `docs/README.md`), run `project-sync` before PRs."
 - List the open questions and who should answer them.

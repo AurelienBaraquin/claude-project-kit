@@ -17,6 +17,7 @@ This file stays short. Details live in the documents below — link to them, do 
 | Topic | File |
 |---|---|
 | What to build: purpose, scope, priorities, success criteria | `docs/brief.md` |
+| Index of all documentation: structure, interfaces, deployment, CI, tests, technologies… | `docs/README.md` |
 | Code structure and flows | `docs/architecture.md` |
 | Decisions and their reasons | `docs/adr/` · `.assistant/decisions-log.md` |
 | Mistakes already made, and what now prevents them | `.assistant/lessons.md` |
@@ -44,7 +45,7 @@ superseded, but never silently.
 |---|---|
 | You start on this project with no prior context (a new session, or you are a sub-agent) | Run the `project-onboard` skill before the task; it only reads |
 | You make or notice a structural choice (dependency, pattern, data model, boundary, tool, process) | Run the `adr-new` skill: an ADR if it is architectural, otherwise one dated line in `.assistant/decisions-log.md` |
-| Your change adds or moves a module, route, table, event, service or directory | Update `docs/architecture.md` in the same change |
+| Your change adds, moves, removes or alters anything that exists in the project — a module, API, command, data model, event, configuration variable, service, technology, pipeline, environment, test setup, deployment step or user-visible behaviour | Update the document that covers it (find it in `docs/README.md`), or create it if the surface is new — the `project-sync` skill describes what each kind of document must contain — and keep the index true, in the same change |
 | The scope, priorities or success criteria change (the user says so, or the work shows the brief is wrong) | Propose the change, update `docs/brief.md` once the user agrees, and record it with `adr-new`; never edit the brief silently |
 | A document, rule or past decision turns out to be wrong or stale | Fix the document; for a decision, write a new ADR that supersedes the old one |
 | A mistake was caught by review, CI or the user | Add an entry to `.assistant/lessons.md`; if it can be enforced, propose a test, lint rule or hook |
