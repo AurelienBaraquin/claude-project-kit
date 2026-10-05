@@ -12,19 +12,44 @@ they were taken). This kit makes that setup reproducible and, above all, *living
 
 | Skill | When | What it does |
 |---|---|---|
-| `project-init` | once, at the start of a new (or near-empty) project | Interviews you, then generates a minimal v0: `CLAUDE.md`, `docs/architecture.md`, ADR template, decisions and lessons logs, PR/issue templates, commit hook, docs check |
-| `project-adopt` | when taking over an existing codebase you did not write or have not touched for a while | Reconstructs what exists from the code and its history (a fact collector script, then targeted reading), measures a health baseline, confirms intent with you, then sets up the same living foundation as `project-init` plus a dated takeover report |
+| `project-init` | once, at the start of a new (or near-empty) project | Takes what you said when launching it, interviews you for the rest, then generates a minimal v0: brief, `CLAUDE.md`, architecture, decision and lesson logs, templates, hooks, docs check |
+| `project-adopt` | when taking over an existing codebase you did not write or have not touched for a while | Reconstructs what exists from the code and its history, measures a health baseline, confirms intent with you, then sets up the same foundation plus a dated takeover report |
 | `adr-new` | every time a decision is made | Records it as an ADR or a dated log line, in the same change as the code |
-| `project-sync` | before a PR, at the end of a session | Audits the docs against the code and fixes drift |
+| `project-sync` | before a PR, at the end of a session | Audits the docs against the code and the brief, and fixes drift |
 
-`project-init` never invents decisions: unknowns become *Open questions*. The generated
-`CLAUDE.md` contains a **Living documentation protocol** that tells the agent it may — and
-should — call `adr-new` and `project-sync` and edit the docs by itself from then on.
+```
+new project ────▶ project-init  ─┐
+                                  ├─▶ brief · CLAUDE.md · architecture · ADRs and logs · hooks
+existing code ──▶ project-adopt ─┘
+                                        while working:
+                                        adr-new      at every decision
+                                        project-sync before a PR, at the end of a session
+```
+
+The generated `CLAUDE.md` contains a **Living documentation protocol** telling the agent when to
+call `adr-new` and `project-sync` and that it may edit the documentation by itself. Neither init
+skill invents anything: what is unknown becomes an *Open question*.
+
+## What the agent reads and writes
+
+| File | Answers | Who changes it |
+|---|---|---|
+| `docs/brief.md` | **What** to build and why: purpose, users, scope in and out, priorities, success criteria, constraints | You decide. The agent proposes changes; each one is recorded with `adr-new`. Never edited silently |
+| `CLAUDE.md` | **How** to work: a short map, hard rules, the living-documentation protocol | Rules come from the interview; the agent keeps the map true |
+| `docs/architecture.md` | **How** it is built: layout, conventions, flows | The agent, in the same change as the code |
+| `docs/adr/` · `.assistant/decisions-log.md` | **Why** it is built that way | `adr-new` |
+| `.assistant/lessons.md` | Mistakes already made and what now prevents them | The agent, when review, CI or you catch one |
+| `.assistant/takeover-report.md` | State of an adopted project on the day of takeover | `project-adopt` only; a snapshot, not maintained |
+
+The project to build is described in the **brief**. It is fed by what you write when you launch
+the skill, by any assignment or README it can read, and by the interview. So say what the project
+is when you launch it: *"Use project-init: a CLI that tracks daily habits and shows streaks, solo,
+learning project"* saves most of the questions.
 
 ## Install
 
 ```bash
-git clone <this repository> ~/claude-project-kit
+git clone https://github.com/AurelienBaraquin/claude-project-kit ~/claude-project-kit
 ~/claude-project-kit/install.sh            # symlinks into ~/.claude/skills
 ```
 
@@ -33,16 +58,40 @@ what the script installed. Restart Claude Code (or start a new session) to load 
 
 ## Use
 
-In a project, ask Claude to run the skill, for example *"use project-init to set up this
-project"*. Afterwards the protocol in `CLAUDE.md` makes the agent reach for `adr-new` and
-`project-sync` on its own.
+- **New project**: *"use project-init to set up this project"*, with a sentence on what it is.
+- **Inherited or resumed project**: *"use project-adopt, I am taking this over to add features"*.
+- Afterwards you do not need to ask: the protocol in `CLAUDE.md` makes the agent reach for
+  `adr-new` and `project-sync` on its own.
 
-## What `project-init` can generate
+### project-init
 
-`CLAUDE.md` · `docs/architecture.md` · `docs/adr/0000-template.md` · `.assistant/decisions-log.md` ·
-`.assistant/lessons.md` · `.github/PULL_REQUEST_TEMPLATE.md` · `.github/ISSUE_TEMPLATE/user-story.md` ·
-`.githooks/commit-msg` · `.githooks/pre-commit` · `.claude/settings.json` ·
-`.claude/hooks/ensure-git-hooks.sh` · `.github/workflows/docs-check.yml` · `scripts/check-docs.mjs`
+- **Quick mode** (default for a small project): it settles everything the repository and sensible
+  defaults can settle, then asks one round of at most 4 questions. **Thorough mode**: the full
+  interview, in four phases (context, technical, process, rules for the agent).
+- Rules in `CLAUDE.md` are copied from a catalogue of canonical sentences
+  (`skills/project-init/rules-catalog.md`), so projects are consistent with each other. The
+  exact text is shown to you before anything is written.
+- Instead of fixed limits it asks for a **working mode** (plan once, step by step, in one go, or
+  by risk) and the **actions that always need your confirmation**.
+- Generates only what you chose: `docs/brief.md` · `CLAUDE.md` · `docs/architecture.md` ·
+  `docs/adr/0000-template.md` · `.assistant/decisions-log.md` · `.assistant/lessons.md` ·
+  `.github/PULL_REQUEST_TEMPLATE.md` · `.github/ISSUE_TEMPLATE/user-story.md` ·
+  `.githooks/commit-msg` · `.githooks/pre-commit` · `.claude/settings.json` ·
+  `.claude/hooks/ensure-git-hooks.sh` · `.github/workflows/docs-check.yml` ·
+  `scripts/check-docs.mjs`
+
+### project-adopt
+
+1. Reads your launch prompt for the reason and goal of the takeover.
+2. Runs `scripts/recon.mjs`, a read-only collector (history, structure, manifests and scripts, CI,
+   tests, TODO markers, tracked `.env` files), then reads what it points to.
+3. After your permission, runs the project's own build and tests to record a **health baseline**,
+   without repairing anything.
+4. Labels every finding *Fact*, *Inference* or *Unknown*, and never invents why something was done.
+5. Asks only what the code cannot say (intent, status, off-limits areas, which observed
+   conventions become rules), shows you the exact text to be written, then generates the same
+   files as `project-init`, plus the takeover report. It changes documentation and tooling only,
+   never source code.
 
 ## Enforcement, not just instructions
 
@@ -54,17 +103,21 @@ Rules that must hold are enforced by mechanisms that travel with the repository:
   Claude Code refuse `git commit` until `git config core.hooksPath .githooks` has been run in
   that clone (`project-init` runs it once).
 
-## The docs check
+## The scripts
 
-`skills/project-sync/scripts/check-docs.mjs` is dependency-free (Node ≥ 18). It verifies relative
-Markdown links, the paths cited in `CLAUDE.md` and `docs/architecture.md`, and ADR numbering and
-status. Configure it with `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`, `ignorePaths`).
-`--version` prints its version; `project-sync` offers to update an older copy in a project. Known
-limit: a directory cited without a trailing `/` is not checked.
+Both are dependency-free (Node ≥ 18) and tested.
+
+- `skills/project-sync/scripts/check-docs.mjs` verifies relative Markdown links, the paths cited
+  in `CLAUDE.md` and `docs/architecture.md`, and ADR numbering and status. Configure it with
+  `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`, `ignorePaths`). `--version` prints its
+  version, and `project-sync` offers to update an older copy in a project. Known limit: a
+  directory cited without a trailing `/` is not checked.
+- `skills/project-adopt/scripts/recon.mjs` prints the facts sheet used by `project-adopt`. It
+  interprets nothing.
 
 ```bash
-node --test skills/project-sync/scripts/check-docs.test.mjs   # its tests
-node --test skills/project-adopt/scripts/recon.test.mjs       # the fact collector's tests
+node --test skills/project-sync/scripts/check-docs.test.mjs
+node --test skills/project-adopt/scripts/recon.test.mjs
 ```
 
 ## Layout
