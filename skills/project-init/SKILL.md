@@ -86,8 +86,9 @@ Use the files in `templates/` (this skill's folder). Choose templates from the a
 | `lessons.md` | always | `.assistant/lessons.md` |
 | `pull_request_template.md` | project uses PRs | `.github/PULL_REQUEST_TEMPLATE.md` |
 | `issue-user-story.md` | project uses GitHub issues | `.github/ISSUE_TEMPLATE/user-story.md` |
-| `commit-msg` | user wants enforced commit rules | `.githooks/commit-msg` (+ tell the user to run `git config core.hooksPath .githooks`) |
-| `settings.json` | user wants no AI attribution in commits/PRs | `.claude/settings.json` (merge, never overwrite) |
+| `commit-msg` | user wants enforced commit rules | `.githooks/commit-msg` (make it executable) |
+| `ensure-git-hooks.sh` | `.githooks/` is generated | `.claude/hooks/ensure-git-hooks.sh` (executable), wired in `.claude/settings.json` |
+| `settings.json` | user wants no AI attribution, or `.githooks/` is generated | `.claude/settings.json` — merge, never overwrite; keep the `attribution` block only if the user wants no AI attribution, and the `hooks` block only if `.githooks/` is generated |
 | `docs-check.yml` | project uses GitHub Actions | `.github/workflows/docs-check.yml` |
 | `../project-sync/scripts/check-docs.mjs` | always | `scripts/check-docs.mjs` (or the layout's script folder) |
 
@@ -108,6 +109,12 @@ Rules when filling a template:
 
 ### 6. Verify
 Run `node scripts/check-docs.mjs`. Fix what it reports. Show the user the list of created files.
+
+### 6b. Activate the hooks
+If `.githooks/` was generated, run `git config core.hooksPath .githooks` (the user asked for
+enforced rules; it is a local, reversible setting) and say so. Remind the user that every fresh
+clone needs the same command. The `ensure-git-hooks.sh` hook makes Claude Code refuse
+`git commit` until it is done, so a clone cannot silently skip the checks.
 
 ### 7. Hand over
 - Do **not** commit unless asked; propose a branch name and commit message following the
