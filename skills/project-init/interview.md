@@ -16,8 +16,9 @@ question*, not a guess). Ask in the user's language.
 
 - **Quick** (small project, or little time): propose defaults for every topic that has a basis
   (the repository, or the *Defaults* table of `rules-catalog.md`), then ask one round of at most
-  4 questions among the topics with **no** basis — typically success and team, tracking and
-  review, non-negotiables, commit attribution. The user amends the proposed defaults in the
+  4 questions among the topics with **no** basis — typically the purpose and scope when neither
+  the invocation prompt nor a brief states them, success and team, tracking and review,
+  non-negotiables, commit attribution. The user amends the proposed defaults in the
   reflect-back step.
 - **Thorough** (larger project, or on request): go through phases A to D below.
 
@@ -27,10 +28,13 @@ Whatever the mode, a topic with no basis and no answer becomes an *Open question
 
 | Question | Why it matters | Skip if |
 |---|---|---|
-| What is the project, in one or two sentences? Who uses it? | First paragraph of `CLAUDE.md` | README states it |
-| Is there a brief, assignment or spec? Where? | Source of truth the agent must read | already given |
-| How is success judged (grade, users, deadline, demo)? | Drives priorities and trade-offs | brief states it |
-| Team size, roles, timeline, priorities (e.g. MoSCoW)? | Scope discipline, PR sizing | solo and no deadline |
+| What is the project, in one or two sentences? Who uses it, and what must they be able to do? | `Purpose` and `Users` of `docs/brief.md`, first paragraph of `CLAUDE.md` | the invocation prompt, the brief or the README states it |
+| Is there a brief, assignment or spec? Where? | Linked and summarised in `docs/brief.md` | already given |
+| What is in scope for the first version, and what is explicitly out? | `Scope` of `docs/brief.md` | the brief states it |
+| What matters most when time is short (priorities, MoSCoW)? | `Priorities` of `docs/brief.md` | the brief states it |
+| How is success judged (grade, users, deadline, demo)? | `Success criteria` of `docs/brief.md` | the brief states it |
+| Constraints: deadline, platform, mandated technology, legal limits? | `Constraints` of `docs/brief.md` | none apply |
+| Team size, roles, timeline? | Review policy, PR sizing | solo and no deadline |
 
 ## Phase B — Technical
 

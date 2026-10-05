@@ -60,8 +60,9 @@ Announce the mode in one line when you present the scan, and say the user can as
 - **Quick mode** — the default for a small project (one manifest, about 30 tracked files or
   fewer) or when the user is short on time. Settle everything the repository and the
   *Defaults* table of [rules-catalog.md](rules-catalog.md) can settle, then ask **one round of at
-  most 4 questions**, chosen among the topics with no detectable basis: success and team, how
-  work is tracked and reviewed, non-negotiables, commit attribution. Everything else is shown,
+  most 4 questions**, chosen among the topics with no detectable basis: the purpose and scope (when neither the
+  invocation prompt nor a brief states them), success and team, how work is tracked and
+  reviewed, non-negotiables, commit attribution. Everything else is shown,
   marked as a default with its reason, in the reflect-back step.
 - **Thorough mode** — larger projects, or on request. Follow [interview.md](interview.md): phases
   A (context), B (technical), C (process), D (AI rules).
@@ -71,7 +72,7 @@ language.
 
 ### 4. Reflect back
 Show what will actually be written, not a paraphrase:
-- the project description, in one or two sentences;
+- the **brief**: purpose, users, scope in and out, priorities, success criteria, constraints;
 - the **exact text of the numbered hard rules** (built from [rules-catalog.md](rules-catalog.md),
   defaults marked as such);
 - the open questions;
@@ -86,6 +87,7 @@ Use the files in `templates/` (this skill's folder). Choose templates from the a
 | Template | Generate when | Target |
 |---|---|---|
 | `CLAUDE.md.tmpl` | always | `CLAUDE.md` |
+| `brief.md.tmpl` | always | `docs/brief.md` |
 | `architecture.md.tmpl` | always | `docs/architecture.md` |
 | `adr-template.md` | always | `docs/adr/0000-template.md` |
 | `decisions-log.md` | always | `.assistant/decisions-log.md` |
@@ -111,6 +113,10 @@ Rules when filling a template:
   when the user says so); adapt the target path.
 - ADRs: write one **only** for a decision the user explicitly made and for which alternatives
   were discussed — use the `adr-new` procedure. Otherwise add one dated line to the decisions log.
+- `docs/brief.md` is built from the invocation prompt, any brief or README, and the phase A
+  answers. It states the owner's intent: do not add scope the user did not state; unknown
+  sections are deleted and their questions go under its *Open questions*. If an external
+  assignment exists, link and summarise it, do not copy it.
 - Fill `docs/architecture.md` only with what *exists* (layout, conventions already in place).
   Describe nothing that is not built yet.
 

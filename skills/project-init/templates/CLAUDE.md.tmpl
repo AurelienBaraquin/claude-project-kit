@@ -7,9 +7,8 @@ conflicts with an older instruction, **this file and the documents it links win*
 
 {{one-paragraph description: what it is, who uses it}}
 
-- Brief / assignment: {{path or link}}
-- Success criteria: {{how the project is judged}}
-- Priorities: {{e.g. MoSCoW, deadline, what to protect first}}
+- Brief — what to build, scope, priorities, success criteria: `docs/brief.md`. **Read it at the
+  start of every session**; it is the source of truth for *what* to build.
 
 ## 2. Map
 
@@ -17,6 +16,7 @@ This file stays short. Details live in the documents below — link to them, do 
 
 | Topic | File |
 |---|---|
+| What to build: purpose, scope, priorities, success criteria | `docs/brief.md` |
 | Code structure and flows | `docs/architecture.md` |
 | Decisions and their reasons | `docs/adr/` · `.assistant/decisions-log.md` |
 | Mistakes already made, and what now prevents them | `.assistant/lessons.md` |
@@ -44,6 +44,7 @@ superseded, but never silently.
 |---|---|
 | You make or notice a structural choice (dependency, pattern, data model, boundary, tool, process) | Run the `adr-new` skill: an ADR if it is architectural, otherwise one dated line in `.assistant/decisions-log.md` |
 | Your change adds or moves a module, route, table, event, service or directory | Update `docs/architecture.md` in the same change |
+| The scope, priorities or success criteria change (the user says so, or the work shows the brief is wrong) | Propose the change, update `docs/brief.md` once the user agrees, and record it with `adr-new`; never edit the brief silently |
 | A document, rule or past decision turns out to be wrong or stale | Fix the document; for a decision, write a new ADR that supersedes the old one |
 | A mistake was caught by review, CI or the user | Add an entry to `.assistant/lessons.md`; if it can be enforced, propose a test, lint rule or hook |
 | Before opening a PR, and at the end of a work session | Run the `project-sync` skill and fix what it reports |
