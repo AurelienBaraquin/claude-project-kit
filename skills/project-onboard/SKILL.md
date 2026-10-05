@@ -35,8 +35,8 @@ mission. If there is none, you will ask for it after the briefing. Do not start 
 ```bash
 node <skill-dir>/scripts/context-pack.mjs <project-root>
 ```
-It lists which foundation documents exist and how long they are, indexes the ADRs with their
-status, shows the latest decisions and lessons, the open questions, the git state (branch,
+It lists which foundation documents exist and how long they are, the documentation index, the
+ADRs with their status, shows the latest decisions and lessons, the open questions, the git state (branch,
 uncommitted changes, recent commits) and whether the documentation check passes.
 
 If **no foundation document exists**, say so, and say what you can still learn from the README,
@@ -48,12 +48,13 @@ manifests and git history, labelled as inference. Suggest `project-init` (new pr
 |---|---|
 | `CLAUDE.md` | All of it: the map, the hard rules, the working mode, the protocol |
 | `docs/brief.md` | All of it: what to build, scope in and out, priorities |
+| `docs/README.md` | The documentation index: which documents exist and what each covers. Open the ones that cover what the mission touches (API, deployment, CI, tests, technologies…) |
 | `docs/architecture.md` | The layout and conventions; the sections the mission touches |
 | ADRs | Titles and status from the pack; open only those that concern the mission, plus any `Proposed`. Skip superseded ones unless the mission touches them |
 | Latest decisions-log entries, lessons | As shown in the pack; open the files only if something is relevant |
 | `.assistant/takeover-report.md` | Only for an adopted project: baseline and known risks |
 
-When the mission is unknown, read the core only (first three rows).
+When the mission is unknown, read the core only (the first four rows).
 
 ### 4. Check the picture against reality
 Do not run tests or builds. Spot-check the two or three statements you will rely on most: that

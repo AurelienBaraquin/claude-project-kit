@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { VERSION, adrIndex, collect, datedEntries, openQuestions, render } from './context-pack.mjs';
+import { VERSION, adrIndex, collect, datedEntries, docsIndex, openQuestions, render } from './context-pack.mjs';
 
 let root;
 
@@ -30,6 +30,7 @@ describe('a project with a foundation', () => {
     put('CLAUDE.md', '# CLAUDE.md\n\n## 6. Open questions\n\n- Which cloud provider?\n- Lint or not?\n\n## 7. Other\n- ignored\n');
     put('docs/brief.md', '# Brief\n\n## Open questions\n\n- None yet.\n');
     put('docs/architecture.md', '# Architecture\n');
+    put('docs/README.md', '# Index\n\n| Document | What it answers | Covers | Update when |\n|---|---|---|---|\n| [api.md](api.md) | The HTTP API | `src/routes/` | a route changes |\n| [adr/](adr/) | Why | decisions | a decision is made |\n');
     put('docs/adr/0000-template.md', '# ADR-0000 — t');
     put('docs/adr/0001-use-postgres.md', '# ADR-0001 — Use PostgreSQL\n\n- **Status**: Accepted\n');
     put('docs/adr/0002-queue.md', '# ADR-0002 — Add a queue\n\n- **Status**: Superseded by ADR-0003\n');
@@ -54,6 +55,13 @@ describe('a project with a foundation', () => {
     ]);
   });
 
+  it('reads the documentation index rows', () => {
+    assert.deepEqual(docsIndex(root), [
+      { name: 'api.md', file: 'api.md', answers: 'The HTTP API', covers: '`src/routes/`' },
+      { name: 'adr/', file: 'adr/', answers: 'Why', covers: 'decisions' },
+    ]);
+  });
+
   it('returns the latest dated entries only', () => {
     assert.deepEqual(datedEntries(root, '.assistant/decisions-log.md', 1), ['2026-02-01 — chose Y — why']);
   });
@@ -74,6 +82,8 @@ describe('a project with a foundation', () => {
     assert.match(text, /^# Context pack/);
     assert.match(text, /`CLAUDE.md` \(\d+ lines\)/);
     assert.match(text, /\[Superseded by ADR-0003\]/);
+    assert.match(text, /Documentation index \(2\)/);
+    assert.match(text, /`api.md` — The HTTP API/);
     assert.match(text, /no docs check installed/);
   });
 });

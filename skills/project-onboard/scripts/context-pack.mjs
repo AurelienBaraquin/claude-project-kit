@@ -12,6 +12,7 @@ export const VERSION = '1.0.0';
 const FOUNDATION = [
   ['CLAUDE.md', 'how to work: map, hard rules, protocol'],
   ['docs/brief.md', 'what to build: purpose, scope, priorities'],
+  ['docs/README.md', 'index of all documentation'],
   ['docs/architecture.md', 'how it is built'],
   ['.assistant/decisions-log.md', 'smaller decisions and their reasons'],
   ['.assistant/lessons.md', 'mistakes made and what prevents them'],
@@ -38,6 +39,21 @@ export function foundation(root) {
     const text = readText(root, file);
     return { path: file, role, present: text !== null, lines: text === null ? 0 : text.split('\n').length };
   });
+}
+
+/** Rows of the documentation index (docs/README.md): [name](file) | answers | covers | update when. */
+export function docsIndex(root) {
+  const text = readText(root, 'docs/README.md');
+  if (text === null) return [];
+  return text
+    .split('\n')
+    .filter((line) => line.startsWith('|') && /\]\(/.test(line))
+    .map((line) => {
+      const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
+      const link = /\[([^\]]*)\]\(([^)]*)\)/.exec(cells[0]);
+      return link ? { name: link[1], file: link[2], answers: cells[1] ?? '', covers: cells[2] ?? '' } : null;
+    })
+    .filter(Boolean);
 }
 
 export function adrIndex(root) {
@@ -100,6 +116,7 @@ export function collect(root) {
   return {
     root: path.resolve(root),
     foundation: foundation(root),
+    docs: docsIndex(root),
     adrs: adrIndex(root),
     decisions: datedEntries(root, '.assistant/decisions-log.md', 10),
     lessons: datedEntries(root, '.assistant/lessons.md', 5),
@@ -127,6 +144,9 @@ export function render(pack) {
   if (present.length === 0) {
     lines.push('', '**No foundation document found.** Suggest `project-init` (new project) or `project-adopt` (existing codebase). Until then, what you know comes from the README, manifests and git history only; label it as such.');
   }
+
+  lines.push('', `## Documentation index (${pack.docs.length})`);
+  lines.push(pack.docs.length === 0 ? '- none (no `docs/README.md` index)' : pack.docs.map((d) => `- \`${d.file}\` — ${d.answers}`).join('\n'));
 
   lines.push('', `## Decision records (${pack.adrs.length})`);
   lines.push(pack.adrs.length === 0 ? '- none' : pack.adrs.map((a) => `- ${a.file} — ${a.title} [${a.status}]`).join('\n'));
