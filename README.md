@@ -1,6 +1,6 @@
 # claude-project-kit
 
-Four Claude Code skills that give an AI agent what it needs to work coherently on a project, and
+Five Claude Code skills that give an AI agent what it needs to work coherently on a project, and
 keep that knowledge true as the project changes.
 
 The idea comes from a school project where an AI produced consistent, high-quality code. What
@@ -14,6 +14,7 @@ they were taken). This kit makes that setup reproducible and, above all, *living
 |---|---|---|
 | `project-init` | once, at the start of a new (or near-empty) project | Takes what you said when launching it, interviews you for the rest, then generates a minimal v0: brief, `CLAUDE.md`, architecture, decision and lesson logs, templates, hooks, docs check |
 | `project-adopt` | when taking over an existing codebase you did not write or have not touched for a while | Reconstructs what exists from the code and its history, measures a health baseline, confirms intent with you, then sets up the same foundation plus a dated takeover report |
+| `project-onboard` | when an agent starts on a project it does not know (new session, teammate's agent, sub-agent) | Read-only. Reads the foundation documents in the right order, checks them against reality, and briefs the user in about 25 lines, then takes the mission you gave it |
 | `adr-new` | every time a decision is made | Records it as an ADR or a dated log line, in the same change as the code |
 | `project-sync` | before a PR, at the end of a session | Audits the docs against the code and the brief, and fixes drift |
 
@@ -21,6 +22,7 @@ they were taken). This kit makes that setup reproducible and, above all, *living
 new project ────▶ project-init  ─┐
                                   ├─▶ brief · CLAUDE.md · architecture · ADRs and logs · hooks
 existing code ──▶ project-adopt ─┘
+                                        when an agent arrives:  project-onboard  (context, then mission)
                                         while working:
                                         adr-new      at every decision
                                         project-sync before a PR, at the end of a session
@@ -46,6 +48,22 @@ the skill, by any assignment or README it can read, and by the interview. So say
 is when you launch it: *"Use project-init: a CLI that tracks daily habits and shows streaks, solo,
 learning project"* saves most of the questions.
 
+## Cloud sessions and teammates
+
+Skills installed in `~/.claude/skills` are **personal**: they load in every project on your
+machine, but not in cloud sessions (claude.ai/code, mobile, `--cloud`, routines) nor on a
+teammate's machine. A repository's own `.claude/skills/` is part of the clone, so it does. For a
+project used that way, copy the day-to-day skills (`adr-new`, `project-sync`, `project-onboard`)
+into it and commit them:
+
+```bash
+~/claude-project-kit/install.sh --project /path/to/repo          # day-to-day skills
+~/claude-project-kit/install.sh --project /path/to/repo --all    # every skill
+```
+
+`project-init` proposes this during its interview, and `project-sync` reports copies that have
+fallen behind the kit. `project-init` and `project-adopt` stay personal: they run once, locally.
+
 ## Install
 
 ```bash
@@ -60,6 +78,8 @@ what the script installed. Restart Claude Code (or start a new session) to load 
 
 - **New project**: *"use project-init to set up this project"*, with a sentence on what it is.
 - **Inherited or resumed project**: *"use project-adopt, I am taking this over to add features"*.
+- **A new agent on a project that already has its foundation**: *"use project-onboard, then add
+  pagination to the task list"*. The first part gives it the context, the rest is its mission.
 - Afterwards you do not need to ask: the protocol in `CLAUDE.md` makes the agent reach for
   `adr-new` and `project-sync` on its own.
 
@@ -93,6 +113,14 @@ what the script installed. Restart Claude Code (or start a new session) to load 
    files as `project-init`, plus the takeover report. It changes documentation and tooling only,
    never source code.
 
+### project-onboard
+
+Read-only, so it is safe to run anywhere. It runs `scripts/context-pack.mjs` (which documents
+exist, ADR index with status, latest decisions and lessons, open questions, git state, docs check
+result), reads the core documents in full and the rest only as far as the mission needs, spot-checks
+what it will rely on, then briefs you. It then follows the project's own working mode. If no
+foundation document exists it says so and suggests `project-init` or `project-adopt`.
+
 ## Enforcement, not just instructions
 
 Rules that must hold are enforced by mechanisms that travel with the repository:
@@ -105,7 +133,7 @@ Rules that must hold are enforced by mechanisms that travel with the repository:
 
 ## The scripts
 
-Both are dependency-free (Node ≥ 18) and tested.
+All three are dependency-free (Node ≥ 18) and tested.
 
 - `skills/project-sync/scripts/check-docs.mjs` verifies relative Markdown links, the paths cited
   in `CLAUDE.md` and `docs/architecture.md`, and ADR numbering and status. Configure it with
@@ -114,10 +142,13 @@ Both are dependency-free (Node ≥ 18) and tested.
   directory cited without a trailing `/` is not checked.
 - `skills/project-adopt/scripts/recon.mjs` prints the facts sheet used by `project-adopt`. It
   interprets nothing.
+- `skills/project-onboard/scripts/context-pack.mjs` prints the snapshot used by
+  `project-onboard`.
 
 ```bash
 node --test skills/project-sync/scripts/check-docs.test.mjs
 node --test skills/project-adopt/scripts/recon.test.mjs
+node --test skills/project-onboard/scripts/context-pack.test.mjs
 ```
 
 ## Layout
@@ -126,7 +157,8 @@ node --test skills/project-adopt/scripts/recon.test.mjs
 skills/
   project-init/   SKILL.md · interview.md · rules-catalog.md · templates/
   project-adopt/  SKILL.md · scripts/recon.mjs (+ tests) · templates/takeover-report.md
+  project-onboard/ SKILL.md · scripts/context-pack.mjs (+ tests)
   adr-new/        SKILL.md
   project-sync/   SKILL.md · scripts/check-docs.mjs (+ tests)
-install.sh
+install.sh         personal install, or --project <dir> to copy skills into a repository
 ```
