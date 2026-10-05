@@ -146,7 +146,7 @@ export function render(pack) {
   }
 
   lines.push('', `## Documentation index (${pack.docs.length})`);
-  lines.push(pack.docs.length === 0 ? '- none (no `docs/README.md` index)' : pack.docs.map((d) => `- \`${d.file}\` — ${d.answers}`).join('\n'));
+  lines.push(pack.docs.length === 0 ? '- none (no `docs/README.md` index)' : pack.docs.map((d) => `- \`${path.posix.join('docs', d.file)}\` — ${d.answers}`).join('\n'));
 
   lines.push('', `## Decision records (${pack.adrs.length})`);
   lines.push(pack.adrs.length === 0 ? '- none' : pack.adrs.map((a) => `- ${a.file} — ${a.title} [${a.status}]`).join('\n'));

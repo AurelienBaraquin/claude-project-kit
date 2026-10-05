@@ -16,7 +16,7 @@ they were taken). This kit makes that setup reproducible and, above all, *living
 | `project-adopt` | when taking over an existing codebase you did not write or have not touched for a while | Reconstructs what exists from the code and its history, measures a health baseline, confirms intent with you, then sets up the same foundation plus a dated takeover report |
 | `project-onboard` | when an agent starts on a project it does not know (new session, teammate's agent, sub-agent) | Read-only. Reads the foundation documents in the right order, checks them against reality, and briefs the user in about 25 lines, then takes the mission you gave it |
 | `adr-new` | every time a decision is made | Records it as an ADR or a dated log line, in the same change as the code |
-| `project-sync` | before a PR, at the end of a session | Audits the docs against the code and the brief, and fixes drift |
+| `project-sync` | before a PR, at the end of a session | Audits the docs against the code and the brief, checks that every surface has an up-to-date document, and fixes drift |
 
 ```
 new project ────▶ project-init  ─┐
@@ -40,6 +40,8 @@ skill invents anything: what is unknown becomes an *Open question*.
 | `docs/brief.md` | **What** to build and why: purpose, users, scope in and out, priorities, success criteria, constraints | You decide. The agent proposes changes; each one is recorded with `adr-new`. Never edited silently |
 | `CLAUDE.md` | **How** to work: a short map, hard rules, the living-documentation protocol | Rules come from the interview; the agent keeps the map true |
 | `docs/architecture.md` | **How** it is built: layout, conventions, flows | The agent, in the same change as the code |
+| `docs/README.md` | The **index of every document**: what each answers, which paths it covers, when to update it | The agent, whenever a document is added or removed |
+| `docs/api.md`, `deployment.md`, `ci.md`, `testing.md`, `configuration.md`, `technologies.md`, `user-guide.md`… | One document per **surface** that exists (see below) | The agent, in the same change as what it covers |
 | `docs/adr/` · `.assistant/decisions-log.md` | **Why** it is built that way | `adr-new` |
 | `.assistant/lessons.md` | Mistakes already made and what now prevents them | The agent, when review, CI or you catch one |
 | `.assistant/takeover-report.md` | State of an adopted project on the day of takeover | `project-adopt` only; a snapshot, not maintained |
@@ -48,6 +50,30 @@ The project to build is described in the **brief**. It is fed by what you write 
 the skill, by any assignment or README it can read, and by the interview. So say what the project
 is when you launch it: *"Use project-init: a CLI that tracks daily habits and shows streaks, solo,
 learning project"* saves most of the questions.
+
+## Everything is documented
+
+Documentation is part of done. The generated `CLAUDE.md` makes it a hard rule: **everything that
+exists and that someone needs to build, run, test, ship, operate or use the project has one
+document**, listed in the `docs/README.md` index and updated in the same change as the code. A
+new surface gets its document in the change that introduces it.
+
+A surface is not limited to a fixed list. The catalogue in
+`skills/project-sync/doc-surfaces.md` describes the common ones (HTTP or RPC interface, CLI, data
+model, events, configuration, getting started, tests, CI/CD, deployment, operations, security and
+privacy, accessibility, user guide, contributing and release) with how to recognise each, what
+its document must contain and when to update it. For anything else — a database, a queue, a
+third-party service, a code generator — the rule is the same: it goes in `docs/technologies.md`
+(or its own document).
+
+- `project-init` and `project-adopt` write the documents of the surfaces that already exist, from
+  verified facts, and mark what only the owner knows as `Unknown:`. A project with nothing built yet
+  gets none: each appears with its surface.
+- `project-sync` checks coverage (a surface with no document), staleness (a document older than
+  the code it covers) and the index. Today these are checks the agent performs, not yet an
+  automated script.
+- `adr-new` keeps the technologies document in step when a technology or service is added or
+  replaced.
 
 ## Cloud sessions and teammates
 
@@ -95,7 +121,8 @@ what the script installed. Restart Claude Code (or start a new session) to load 
   exact text is shown to you before anything is written.
 - Instead of fixed limits it asks for a **working mode** (plan once, step by step, in one go, or
   by risk) and the **actions that always need your confirmation**.
-- Generates only what you chose: `docs/brief.md` · `CLAUDE.md` · `docs/architecture.md` ·
+- Generates only what you chose: `docs/brief.md` · `CLAUDE.md` · `docs/README.md` ·
+  `docs/architecture.md` · the documents of the surfaces that already exist ·
   `docs/adr/0000-template.md` · `.assistant/decisions-log.md` · `.assistant/lessons.md` ·
   `.github/PULL_REQUEST_TEMPLATE.md` · `.github/ISSUE_TEMPLATE/user-story.md` ·
   `.githooks/commit-msg` · `.githooks/pre-commit` · `.claude/settings.json` ·
@@ -113,8 +140,9 @@ what the script installed. Restart Claude Code (or start a new session) to load 
 4. Labels every finding *Fact*, *Inference* or *Unknown*, and never invents why something was done.
 5. Asks only what the code cannot say (intent, status, off-limits areas, which observed
    conventions become rules), shows you the exact text to be written, then generates the same
-   files as `project-init`, plus the takeover report. It changes documentation and tooling only,
-   never source code.
+   files as `project-init`, plus the takeover report and **one document per surface it found**
+   (interfaces, data, configuration, tests, CI, deployment, technologies…, with `Unknown:` for
+   what only the owner can tell). It changes documentation and tooling only, never source code.
 
 ### project-onboard
 
@@ -162,6 +190,6 @@ skills/
   project-adopt/   SKILL.md · scripts/recon.mjs (+ tests) · templates/takeover-report.md
   project-onboard/ SKILL.md · scripts/context-pack.mjs (+ tests)
   adr-new/         SKILL.md
-  project-sync/    SKILL.md · scripts/check-docs.mjs (+ tests)
+  project-sync/    SKILL.md · doc-surfaces.md · scripts/check-docs.mjs (+ tests)
 install.sh          personal install, or --project <dir> to copy skills into a repository
 ```

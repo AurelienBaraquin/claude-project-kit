@@ -83,7 +83,7 @@ describe('a project with a foundation', () => {
     assert.match(text, /`CLAUDE.md` \(\d+ lines\)/);
     assert.match(text, /\[Superseded by ADR-0003\]/);
     assert.match(text, /Documentation index \(2\)/);
-    assert.match(text, /`api.md` — The HTTP API/);
+    assert.match(text, /`docs\/api.md` — The HTTP API/);
     assert.match(text, /no docs check installed/);
   });
 });
