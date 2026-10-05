@@ -89,8 +89,9 @@ Write up, labelling Fact / Inference / Unknown:
 
 ### 5. Confirm with the user
 Ask only what the code cannot say, in rounds of at most 4 questions:
-1. **Intent and status** — show the inferred purpose and ask whether it is right; is the project
-   in production, dormant but valuable, experimental, or unknown?
+1. **Intent and status** — show the inferred purpose and ask whether it is right; what should the
+   project cover from now on (what is in scope, what is out)? Is it in production, dormant but
+   valuable, experimental, or unknown?
 2. **Constraints** — areas that are fragile, generated, vendored or off-limits; deployment
    targets; deadlines.
 3. **Rules** — which observed conventions become rules (multi-select, drawn from step 4)?
@@ -101,8 +102,8 @@ Ask only what the code cannot say, in rounds of at most 4 questions:
    correction.
 
 ### 6. Reflect back
-Show what will be written, not a paraphrase: the purpose sentence; the module map; the **exact
-text of the numbered hard rules** (from the catalogue); the decisions to record and how (ADR
+Show what will be written, not a paraphrase: the purpose sentence; the module map; the **brief**
+(purpose, scope, priorities, success criteria); the **exact text of the numbered hard rules** (from the catalogue); the decisions to record and how (ADR
 when the user gave the rationale, log line "rationale unknown" otherwise); the risks and debt;
 the open questions; the files to be created or merged. Wait for validation.
 
@@ -110,6 +111,11 @@ the open questions; the files to be created or merged. Wait for validation.
 Follow the generation step of [../project-init/SKILL.md](../project-init/SKILL.md) (templates,
 catalogue, hooks, merge-never-overwrite), with these specifics:
 
+- **`docs/brief.md`** — from `../project-init/templates/brief.md.tmpl`. Built from the user's
+  confirmed answers, never from the code alone: what the code *does today* is described in
+  `architecture.md`, whereas the brief states what the project is *meant* to be. Anything the
+  user left open goes to its *Open questions*. Add the takeover goal under *Constraints* or
+  *Priorities* as the user framed it.
 - **`CLAUDE.md`** — merged if one exists. Section 1 carries the confirmed purpose and the
   takeover goal.
 - **`docs/architecture.md`** — richer than at init, from verified facts only: layout with each

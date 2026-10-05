@@ -55,6 +55,8 @@ decision. Never present it as contemporaneous.
 
 - Add a one-line pointer in `.assistant/decisions-log.md` (`… — see ADR-NNNN`).
 - If the decision changes the structure, update `docs/architecture.md`.
+- If it changes the scope, priorities or success criteria, update `docs/brief.md` — after the
+  user agrees, since the brief is the owner's statement of intent.
 - If it makes a rule in `CLAUDE.md` obsolete or adds one, update `CLAUDE.md`.
 - Run `node scripts/check-docs.mjs` (numbering, status, links).
 - The ADR travels in the same commit or PR as the code it governs.

@@ -34,6 +34,7 @@ gone because the code was deleted, remove or rewrite the sentence — do not rec
 
 | Check | How | Fix |
 |---|---|---|
+| `docs/brief.md` matches reality | Compare its scope, priorities and success criteria with what is built and with recent decisions in the log; look for features outside the stated scope, in-scope items abandoned, criteria no longer measured | Propose the update to the user; change the brief only once they agree, then record it with `adr-new` |
 | `docs/architecture.md` matches the tree | List top-level folders and the modules/routes/tables/events the doc names; look for new ones it omits and described ones that are gone | Update the doc to what exists — only what exists |
 | Decisions without a record | Skim recent `git log` and the decisions log for structural choices (new dependency, pattern, boundary) | Run `adr-new` for any that lack an ADR or log line |
 | `CLAUDE.md` holds volatile detail | Look for counters, issue ranges, sprint-specific numbers, copied architecture | Move them to the document that owns them, or delete; keep the file short |
@@ -52,6 +53,6 @@ script and the judgement checks.
 ## 4. Boundaries
 
 - Mechanical fixes and factual corrections: do them, in the current change.
-- Anything that changes a *decision* or a *rule*: propose it, and write it through `adr-new` or
+- Anything that changes a *decision*, a *rule* or the *brief*: propose it, and write it through `adr-new` or
   after the user agrees.
 - Do not invent documentation for things that do not exist.
