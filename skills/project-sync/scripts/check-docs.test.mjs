@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { run } from './check-docs.mjs';
+import { VERSION, run } from './check-docs.mjs';
 
 let root;
 
@@ -144,5 +146,14 @@ describe('ADRs', () => {
   it('reports a title that does not match the file number', () => {
     put('docs/adr/0001-a.md', adr(2));
     assert.deepEqual(run(root), ['docs/adr/0001-a.md: title must start with "# ADR-0001"']);
+  });
+});
+
+describe('version', () => {
+  it('prints a semantic version with --version, matching the exported constant', () => {
+    const script = fileURLToPath(new URL('./check-docs.mjs', import.meta.url));
+    const printed = execFileSync(process.execPath, [script, '--version'], { encoding: 'utf8' });
+    assert.match(VERSION, /^\d+\.\d+\.\d+$/);
+    assert.equal(printed.trim(), VERSION);
   });
 });

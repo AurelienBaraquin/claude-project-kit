@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Deterministic documentation checks. Zero dependencies, run from the repository root:
-//   node scripts/check-docs.mjs [rootDir]
+//   node scripts/check-docs.mjs [rootDir]      (or --version)
 //
 // 1. every relative Markdown link resolves to an existing file or directory
 // 2. every inline-code path cited (a file path or a directory ending in `/`) in the "path documents" (CLAUDE.md, docs/architecture.md by
@@ -24,6 +24,9 @@ const DEFAULTS = {
   adrDir: 'docs/adr',
   ignorePaths: [],
 };
+// Bumped when behaviour changes; project-sync compares it with a project's copy.
+export const VERSION = '1.0.0';
+
 const ADR_FILE = /^(\d{4})-.+\.md$/;
 const ADR_STATUS = /^- \*\*Status\*\*:\s*(.+)$/m;
 const VALID_STATUS = /^(Proposed|Accepted|Deprecated|Superseded by ADR-(\d{4}))\b/;
@@ -200,6 +203,10 @@ export function run(root) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
+  if (process.argv[2] === '--version') {
+    process.stdout.write(`${VERSION}\n`);
+    process.exit(0);
+  }
   const root = path.resolve(process.argv[2] ?? '.');
   const problems = run(root);
   if (problems.length > 0) {

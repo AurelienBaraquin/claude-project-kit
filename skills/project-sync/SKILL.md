@@ -22,6 +22,11 @@ It verifies: relative Markdown links resolve; paths cited in code spans in `CLAU
 supersede targets exist. Options go in `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`,
 `ignorePaths`).
 
+**Is the project's copy current?** Compare `node scripts/check-docs.mjs --version` with
+`node <skill-dir>/scripts/check-docs.mjs --version`. If the project's copy is older, or prints no
+version, offer to replace it with the skill's copy. The script is meant to stay unmodified;
+configuration lives in `.docs-check.json`.
+
 Fix mechanical problems directly: update the renamed path, repair the link. If a cited path is
 gone because the code was deleted, remove or rewrite the sentence — do not recreate the file.
 
@@ -35,6 +40,7 @@ gone because the code was deleted, remove or rewrite the sentence — do not rec
 | Rules versus reality | Pick the commands, thresholds and rules in `CLAUDE.md`; verify them against `package.json`/config/CI | Correct the file |
 | Lessons without a safeguard | Entries in `.assistant/lessons.md` whose "what now prevents it" is empty | Propose a test, lint rule, hook or CI check |
 | Open questions | Entries in `CLAUDE.md` that the code or the user has since answered | Resolve and remove, recording the answer where it belongs |
+| Enforcement is active | If `.githooks/` exists, `git config core.hooksPath` must print `.githooks`; `.claude/hooks/ensure-git-hooks.sh` must exist and be wired in `.claude/settings.json` | Activate the hook path, restore the missing files |
 | Superseded ADRs | ADRs still marked Accepted whose subject was replaced | Mark them superseded via `adr-new` |
 
 ## 3. Report
