@@ -53,8 +53,15 @@ Follow [interview.md](interview.md): phases A (context), B (technical), C (proce
 rules). Skip every question already answered. Conduct it in the user's language.
 
 ### 4. Reflect back
-Present a compact summary: what the project is, the hard rules, the process, the AI autonomy
-level, the open questions. Wait for validation or corrections.
+Show what will actually be written, not a paraphrase:
+- the project description, in one or two sentences;
+- the **exact text of the numbered hard rules** (built from [rules-catalog.md](rules-catalog.md),
+  defaults marked as such);
+- the open questions;
+- the list of files that will be created or merged.
+
+Wait for validation or corrections. Apply corrections to the rules text itself, then show it
+again if it changed materially.
 
 ### 5. Generate
 Use the files in `templates/` (this skill's folder). Choose templates from the answers:
@@ -77,10 +84,9 @@ Rules when filling a template:
 - Replace every `{{placeholder}}` with a real value, or delete the line/section. **No unresolved
   placeholder, no "TODO" left in the output.** Unknowns become *Open questions*.
 - Delete template sections that do not apply; do not keep empty headings.
-- Autonomy: write the actions the user allowed, then add "Anything else that changes the
-  repository or the outside world: ask first."
-- Never turn the working mode into numeric limits (files, lines); use the user's chosen mode and
-  risk triggers.
+- Hard rules come from [rules-catalog.md](rules-catalog.md): copy each sentence verbatim,
+  substituting only its `<values>`, so wording is identical across projects. Never turn the
+  working mode into numeric limits (files, lines).
 - Write in the language the user chose for the project docs (templates are in English).
 - Do not create files the project's own rules forbid (for example files at the repository root
   when the user says so); adapt the target path.
