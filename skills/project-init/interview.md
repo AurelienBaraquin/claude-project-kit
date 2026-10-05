@@ -1,8 +1,16 @@
 # Interview guide
 
 Question bank for `project-init`. Ask only what the repository and the brief do not already
-answer. At most 4 questions per round, the recommended option first, always allow "decide later"
-(it becomes an *Open question*, not a guess). Ask in the user's language.
+answer. At most 4 questions per round, always allow "decide later" (it becomes an *Open
+question*, not a guess). Ask in the user's language.
+
+## Offering options
+
+- Mark one option "(Recommended)", first in the list, **only if you can give a reason** (it is
+  what the repository already does, or a widely accepted practice) and write that reason in the
+  option's description. If there is no basis, mark none.
+- Multi-select: state in the question what an unchecked item means. Default: **unchecked = the
+  agent asks first**. Do not infer "forbidden" from a missing check.
 
 ## Phase A — Context
 

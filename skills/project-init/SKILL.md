@@ -17,8 +17,11 @@ cannot be known on day 1 (architecture, most decisions) is recorded later, as it
 2. **Never invent.** A decision the user has not made is not written as a decision. Unknowns go
    to the *Open questions* section of `CLAUDE.md`.
 3. **Ask in small batches.** At most 4 questions per round, through `AskUserQuestion` when
-   available, the recommended option first, and always an "I don't know yet / decide later"
-   path.
+   available, and always an "I don't know yet / decide later" path. Mark an option
+   "(Recommended)" and put it first **only when there is a reason** — detected in the repository
+   or a widely accepted practice — and state that reason in its description. With no basis, mark
+   none rather than fake a preference. In multi-select questions, say in the question text what
+   an unchecked box means: *unchecked = the agent asks first*, never "forbidden" by inference.
 4. **Reflect back before writing.** Summarise what you understood and get a yes.
 5. **Minimal v0.** Fewer, true files beat many speculative ones. A short `CLAUDE.md` (≤ 100
    lines) is a feature.
