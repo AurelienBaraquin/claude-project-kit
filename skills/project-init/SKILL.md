@@ -1,6 +1,6 @@
 ---
 name: project-init
-description: Bootstrap the working foundations of a project (new or existing) through an interview — CLAUDE.md, docs/architecture.md, ADR set-up, decisions and lessons logs, PR/issue templates, commit hook, docs check. Use when starting a project, when a repository has no CLAUDE.md or architecture.md, or when the user asks to set up project conventions or documentation. Produces a minimal v0 and never invents decisions; the project then keeps its documentation alive with the adr-new and project-sync skills.
+description: Bootstrap the working foundations of a project (new or existing) through an interview — CLAUDE.md, docs/architecture.md, ADR set-up, decisions and lessons logs, PR/issue templates, commit hook, docs check. Use when starting a project, when a repository has no CLAUDE.md or architecture.md, or when the user asks to set up project conventions or documentation. For a substantial existing codebase you are taking over, use project-adopt instead. Produces a minimal v0 and never invents decisions; the project then keeps its documentation alive with the adr-new and project-sync skills.
 ---
 
 # project-init
@@ -34,10 +34,16 @@ cannot be known on day 1 (architecture, most decisions) is recorded later, as it
 ## Procedure
 
 ### 1. Detect the situation
+- **What the user wrote when invoking the skill is the first input**: the purpose of the project,
+  goals, constraints, deadlines. Extract it, show it back in the reflect-back step, and never ask
+  again for what was already said.
 - Greenfield (empty or near-empty repo) or existing project? Check `git ls-files`, manifests
   (`package.json`, `pyproject.toml`, `go.mod`, …), README, CI, existing `CLAUDE.md`/`docs/`.
 - If the user gave no brief or assignment document, ask for its path or a short description as
   the first question. Read it fully.
+- If the repository is a substantial existing codebase that the user did not write or is
+  returning to after a long time, suggest `project-adopt` instead: it reconstructs what exists
+  before setting rules.
 
 ### 2. Pre-fill from the repository (existing projects)
 Derive stack, layout, scripts (test/lint/build), CI, conventions, and existing ADRs. These become
