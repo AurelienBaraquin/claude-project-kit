@@ -47,8 +47,9 @@ question*, not a guess). Ask in the user's language.
 
 | Question | Why | Skip if |
 |---|---|---|
-| Autonomy: which of these may the agent do without asking — edit docs, write ADRs, create branches, open PRs, merge? | Defines the protocol's boundaries | — (always ask) |
-| Scope guard: when must it stop and re-plan (number of files / lines)? | Prevents unrequested sprawl | — |
+| Autonomy: which of these may the agent do without asking — edit docs, write ADRs, create branches, open PRs, merge? (multi-select; unchecked = asks first) | Defines the protocol's boundaries | — (always ask) |
+| Working mode: how does the agent proceed? (a) plan, one approval, then execute and report; (b) plan, then stop for validation after each step; (c) execute in one go and report at the end; (d) by risk — free on reversible changes, stops on structural or irreversible ones | Replaces any numeric limit; sets the rhythm of validation | — (always ask) |
+| Always ask before… (multi-select): adding a dependency, deleting files or data, schema migration, changing CI or hooks, pushing / deploying / publishing, changing a public API | Risk triggers that hold in every mode | — (always ask) |
 | Identity and attribution: commit author, may it add `Co-Authored-By`/"Generated with" lines? | Enforce via `settings.json` and the commit hook, not prose | — |
 | Forbidden actions (push to main, touch folders, add dependencies, run migrations)? | Hard rules | — |
 | Language of code, commits, documentation? | Language of generated docs | consistent in repo |
@@ -62,5 +63,7 @@ question*, not a guess). Ask in the user's language.
 
 - Asking 20 questions in a row: batch, prefill, skip.
 - Turning a vague preference into a rule or an ADR: if the user hesitated, it is an open question.
+- Fixed numeric limits ("stop after 3 files / 50 lines"): size is not risk. Ask for a working mode
+  and risk triggers instead.
 - Interrogating about architecture on day 1 for a project that has none yet: record the
   constraints, leave the design to be decided with `adr-new` when the need arises.

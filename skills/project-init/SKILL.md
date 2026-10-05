@@ -77,6 +77,10 @@ Rules when filling a template:
 - Replace every `{{placeholder}}` with a real value, or delete the line/section. **No unresolved
   placeholder, no "TODO" left in the output.** Unknowns become *Open questions*.
 - Delete template sections that do not apply; do not keep empty headings.
+- Autonomy: write the actions the user allowed, then add "Anything else that changes the
+  repository or the outside world: ask first."
+- Never turn the working mode into numeric limits (files, lines); use the user's chosen mode and
+  risk triggers.
 - Write in the language the user chose for the project docs (templates are in English).
 - Do not create files the project's own rules forbid (for example files at the repository root
   when the user says so); adapt the target path.
