@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, symlinkSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -155,5 +155,23 @@ describe('version', () => {
     const printed = execFileSync(process.execPath, [script, '--version'], { encoding: 'utf8' });
     assert.match(VERSION, /^\d+\.\d+\.\d+$/);
     assert.equal(printed.trim(), VERSION);
+  });
+});
+
+describe('run through a symlinked skill folder', () => {
+  it('still executes and reports problems with a non-zero exit code', () => {
+    const scripts = path.dirname(fileURLToPath(import.meta.url));
+    const link = path.join(root, 'linked-scripts');
+    symlinkSync(scripts, link);
+    put('CLAUDE.md', 'See `ghost/file.ts`.');
+    let status = 0;
+    try {
+      execFileSync(process.execPath, [path.join(link, 'check-docs.mjs'), root], { stdio: 'pipe' });
+    } catch (error) {
+      status = error.status;
+    }
+    assert.equal(status, 1);
+    const version = execFileSync(process.execPath, [path.join(link, 'check-docs.mjs'), '--version'], { encoding: 'utf8' });
+    assert.equal(version.trim(), VERSION);
   });
 });

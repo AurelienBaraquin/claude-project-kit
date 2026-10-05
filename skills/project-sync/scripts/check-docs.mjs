@@ -12,8 +12,9 @@
 //   { "ignore": ["legacy/"], "pathDocs": ["CLAUDE.md"], "adrDir": "docs/adr",
 //     "ignorePaths": ["^org/repo$"] }
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 // Never part of the project: excluded from the file index and from scanning.
 const NEVER_INDEXED = ['node_modules/', '.git/', 'dist/', 'build/', 'coverage/'];
@@ -202,7 +203,9 @@ export function run(root) {
   return problems;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// realpath: the skill folder is usually reached through a symlink, which would otherwise make
+// this guard false and the script silently do nothing.
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   if (process.argv[2] === '--version') {
     process.stdout.write(`${VERSION}\n`);
     process.exit(0);

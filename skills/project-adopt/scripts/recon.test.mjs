@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
 import { VERSION, collect, render } from './recon.mjs';
@@ -112,4 +113,12 @@ describe('a directory that is not a git repository', () => {
 
 it('exposes a semantic version', () => {
   assert.match(VERSION, /^\d+\.\d+\.\d+$/);
+});
+
+it('still prints the facts sheet when run through a symlinked skill folder', () => {
+  const link = path.join(root, 'linked-scripts');
+  symlinkSync(path.dirname(fileURLToPath(import.meta.url)), link);
+  put('main.py', 'print(1)');
+  const output = execFileSync(process.execPath, [path.join(link, 'recon.mjs'), root], { encoding: 'utf8' });
+  assert.match(output, /^# Facts sheet/);
 });

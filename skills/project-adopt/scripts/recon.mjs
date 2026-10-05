@@ -3,8 +3,9 @@
 // repository contains and how it has evolved, with no interpretation. Zero dependencies.
 //   node recon.mjs [rootDir]
 import { execFileSync } from 'node:child_process';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 export const VERSION = '1.0.0';
 
@@ -228,7 +229,9 @@ export function render(facts) {
   return `${lines.join('\n')}\n`;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// realpath: the skill folder is usually reached through a symlink, which would otherwise make
+// this guard false and the script silently do nothing.
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   if (process.argv[2] === '--version') {
     process.stdout.write(`${VERSION}\n`);
   } else {
