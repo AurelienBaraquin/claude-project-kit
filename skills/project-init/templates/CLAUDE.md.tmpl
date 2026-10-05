@@ -1,0 +1,60 @@
+# CLAUDE.md
+
+Operating guide for AI agents working in this repository. Read it first, every session. If it
+conflicts with an older instruction, **this file and the documents it links win**.
+
+## 1. Project
+
+{{one-paragraph description: what it is, who uses it}}
+
+- Brief / assignment: {{path or link}}
+- Success criteria: {{how the project is judged}}
+- Priorities: {{e.g. MoSCoW, deadline, what to protect first}}
+
+## 2. Map
+
+This file stays short. Details live in the documents below — link to them, do not copy them here.
+
+| Topic | File |
+|---|---|
+| Code structure and flows | `docs/architecture.md` |
+| Decisions and their reasons | `docs/adr/` · `.assistant/decisions-log.md` |
+| Mistakes already made, and what now prevents them | `.assistant/lessons.md` |
+| {{contribution rules, brief, board, runbooks…}} | {{files}} |
+
+## 3. Hard rules
+
+{{numbered list built from the interview: language and strictness rules, forbidden actions,
+git/commit conventions, review policy, identity and attribution, protected folders}}
+
+- Do what the task asks, nothing more. Before touching more than {{N}} files or {{M}} lines
+  beyond the task, stop and confirm the plan.
+- Read a file fully before editing it.
+- Never state something about the code you have not verified in the code.
+
+## 4. Commands
+
+```bash
+{{install / test / lint / build / run commands}}
+```
+
+## 5. Living documentation protocol
+
+The documentation is part of the product. You are **authorised, and expected, to keep it
+current without asking**, in the same change as the code. Decisions are not final: they can be
+superseded, but never silently.
+
+| When | Do |
+|---|---|
+| You make or notice a structural choice (dependency, pattern, data model, boundary, tool, process) | Run the `adr-new` skill: an ADR if it is architectural, otherwise one dated line in `.assistant/decisions-log.md` |
+| Your change adds or moves a module, route, table, event, service or directory | Update `docs/architecture.md` in the same change |
+| A document, rule or past decision turns out to be wrong or stale | Fix the document; for a decision, write a new ADR that supersedes the old one |
+| A mistake was caught by review, CI or the user | Add an entry to `.assistant/lessons.md`; if it can be enforced, propose a test, lint rule or hook |
+| Before opening a PR, and at the end of a work session | Run the `project-sync` skill and fix what it reports |
+
+Describe only what exists. If you do not know, write it under *Open questions* and ask the
+user — never guess into a document. Keep this file under about 100 lines.
+
+## 6. Open questions
+
+{{one line per unresolved point with its owner, or "None yet."}}

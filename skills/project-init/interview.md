@@ -1,0 +1,58 @@
+# Interview guide
+
+Question bank for `project-init`. Ask only what the repository and the brief do not already
+answer. At most 4 questions per round, the recommended option first, always allow "decide later"
+(it becomes an *Open question*, not a guess). Ask in the user's language.
+
+## Phase A — Context
+
+| Question | Why it matters | Skip if |
+|---|---|---|
+| What is the project, in one or two sentences? Who uses it? | First paragraph of `CLAUDE.md` | README states it |
+| Is there a brief, assignment or spec? Where? | Source of truth the agent must read | already given |
+| How is success judged (grade, users, deadline, demo)? | Drives priorities and trade-offs | brief states it |
+| Team size, roles, timeline, priorities (e.g. MoSCoW)? | Scope discipline, PR sizing | solo and no deadline |
+
+## Phase B — Technical
+
+| Question | Why | Skip if |
+|---|---|---|
+| Stack and runtime versions? | Commands, strictness rules | manifests answer it |
+| Where does it run (local, VPS, cloud, containers)? | Deployment notes, what "done" means | nothing to deploy |
+| Data stores, external services? | Boundaries to document | detectable |
+| Non-negotiables: security, privacy/GDPR, accessibility, performance, i18n? | Hard rules and early oracles | none apply |
+| Quality bars: strict typing, coverage threshold, lint/format? | Hard rules the agent must respect | config files answer it |
+| Existing code to keep, ignore or never touch? | Protects frozen or legacy areas | greenfield |
+
+## Phase C — Process
+
+| Question | Why | Skip if |
+|---|---|---|
+| Branching and commit conventions (Conventional Commits, branch naming)? | Hard rules, commit hook | CONTRIBUTING states it |
+| Review policy (approvals, who merges, squash)? | Agent must not self-merge | solo |
+| Where is work tracked (GitHub issues/board, other)? Must every change link to an item? | Issue template, PR template | no tracker |
+| CI: what runs, what blocks a merge? Do docs-only changes skip it? | Docs check job | no CI yet |
+| Definition of done? | PR checklist | none defined |
+| Release and versioning approach? | Optional section | no releases |
+
+## Phase D — Rules for the AI agent
+
+| Question | Why | Skip if |
+|---|---|---|
+| Autonomy: which of these may the agent do without asking — edit docs, write ADRs, create branches, open PRs, merge? | Defines the protocol's boundaries | — (always ask) |
+| Scope guard: when must it stop and re-plan (number of files / lines)? | Prevents unrequested sprawl | — |
+| Identity and attribution: commit author, may it add `Co-Authored-By`/"Generated with" lines? | Enforce via `settings.json` and the commit hook, not prose | — |
+| Forbidden actions (push to main, touch folders, add dependencies, run migrations)? | Hard rules | — |
+| Language of code, commits, documentation? | Language of generated docs | consistent in repo |
+
+## Closing
+
+- "Anything I should know that I did not ask?" (one open question).
+- Read back the **open questions** list and confirm who owns each.
+
+## Anti-patterns
+
+- Asking 20 questions in a row: batch, prefill, skip.
+- Turning a vague preference into a rule or an ADR: if the user hesitated, it is an open question.
+- Interrogating about architecture on day 1 for a project that has none yet: record the
+  constraints, leave the design to be decided with `adr-new` when the need arises.
