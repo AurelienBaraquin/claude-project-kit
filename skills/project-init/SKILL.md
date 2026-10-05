@@ -48,9 +48,20 @@ rather than assuming: no git remote while the user wants issues and PRs (`git re
 CI while a docs check workflow is requested, no test script while "tests for all logic" is a
 rule, an existing `CLAUDE.md` or `.claude/settings.json` that must be merged, not replaced.
 
-### 3. Interview
-Follow [interview.md](interview.md): phases A (context), B (technical), C (process), D (AI
-rules). Skip every question already answered. Conduct it in the user's language.
+### 3. Choose the depth, then interview
+Announce the mode in one line when you present the scan, and say the user can ask for the other.
+
+- **Quick mode** — the default for a small project (one manifest, about 30 tracked files or
+  fewer) or when the user is short on time. Settle everything the repository and the
+  *Defaults* table of [rules-catalog.md](rules-catalog.md) can settle, then ask **one round of at
+  most 4 questions**, chosen among the topics with no detectable basis: success and team, how
+  work is tracked and reviewed, non-negotiables, commit attribution. Everything else is shown,
+  marked as a default with its reason, in the reflect-back step.
+- **Thorough mode** — larger projects, or on request. Follow [interview.md](interview.md): phases
+  A (context), B (technical), C (process), D (AI rules).
+
+In both modes: skip every question already answered, and conduct the interview in the user's
+language.
 
 ### 4. Reflect back
 Show what will actually be written, not a paraphrase:

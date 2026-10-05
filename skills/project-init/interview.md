@@ -12,6 +12,17 @@ question*, not a guess). Ask in the user's language.
 - Multi-select: state in the question what an unchecked item means. Default: **unchecked = the
   agent asks first**. Do not infer "forbidden" from a missing check.
 
+## Quick mode and thorough mode
+
+- **Quick** (small project, or little time): propose defaults for every topic that has a basis
+  (the repository, or the *Defaults* table of `rules-catalog.md`), then ask one round of at most
+  4 questions among the topics with **no** basis — typically success and team, tracking and
+  review, non-negotiables, commit attribution. The user amends the proposed defaults in the
+  reflect-back step.
+- **Thorough** (larger project, or on request): go through phases A to D below.
+
+Whatever the mode, a topic with no basis and no answer becomes an *Open question*.
+
 ## Phase A — Context
 
 | Question | Why it matters | Skip if |
