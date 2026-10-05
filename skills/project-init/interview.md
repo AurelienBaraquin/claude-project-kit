@@ -18,8 +18,8 @@ question*, not a guess). Ask in the user's language.
   (the repository, or the *Defaults* table of `rules-catalog.md`), then ask one round of at most
   4 questions among the topics with **no** basis — typically the purpose and scope when neither
   the invocation prompt nor a brief states them, success and team, tracking and review,
-  non-negotiables, commit attribution, cloud or team use. The user amends the proposed defaults in the
-  reflect-back step.
+  non-negotiables, commit attribution, cloud or team use. The user amends the proposed defaults
+  in the reflect-back step.
 - **Thorough** (larger project, or on request): go through phases A to D below.
 
 Whatever the mode, a topic with no basis and no answer becomes an *Open question*.

@@ -29,7 +29,8 @@ existing code ──▶ project-adopt ─┘
 ```
 
 The generated `CLAUDE.md` contains a **Living documentation protocol** telling the agent when to
-call `adr-new` and `project-sync` and that it may edit the documentation by itself. Neither init
+call `project-onboard`, `adr-new` and `project-sync` and that it may edit the documentation by
+itself. Neither init
 skill invents anything: what is unknown becomes an *Open question*.
 
 ## What the agent reads and writes
@@ -71,7 +72,8 @@ git clone https://github.com/AurelienBaraquin/claude-project-kit ~/claude-projec
 ~/claude-project-kit/install.sh            # symlinks into ~/.claude/skills
 ```
 
-`git pull` then updates every machine. `--copy` copies instead of linking, `--uninstall` removes
+`git pull` updates the skills you already have linked; run `install.sh` again after a pull that
+adds a new skill, so it gets linked too. `--copy` copies instead of linking, `--uninstall` removes
 what the script installed. Restart Claude Code (or start a new session) to load the skills.
 
 ## Use
@@ -98,7 +100,8 @@ what the script installed. Restart Claude Code (or start a new session) to load 
   `.github/PULL_REQUEST_TEMPLATE.md` · `.github/ISSUE_TEMPLATE/user-story.md` ·
   `.githooks/commit-msg` · `.githooks/pre-commit` · `.claude/settings.json` ·
   `.claude/hooks/ensure-git-hooks.sh` · `.github/workflows/docs-check.yml` ·
-  `scripts/check-docs.mjs`
+  `scripts/check-docs.mjs` · and, for cloud or team use, copies of the day-to-day skills in
+  `.claude/skills/`
 
 ### project-adopt
 
@@ -127,8 +130,8 @@ Rules that must hold are enforced by mechanisms that travel with the repository:
 
 - `commit-msg` rejects non-conforming commit messages and AI attribution lines;
 - `pre-commit` runs the docs check, so drift is caught the moment it is introduced;
-- `.claude/settings.json` hides AI attribution and wires `ensure-git-hooks.sh`, which makes
-  Claude Code refuse `git commit` until `git config core.hooksPath .githooks` has been run in
+- `.claude/settings.json` hides AI attribution (when you chose no AI attribution) and wires
+  `ensure-git-hooks.sh`, which makes Claude Code refuse `git commit` until `git config core.hooksPath .githooks` has been run in
   that clone (`project-init` runs it once).
 
 ## The scripts
@@ -155,10 +158,10 @@ node --test skills/project-onboard/scripts/context-pack.test.mjs
 
 ```
 skills/
-  project-init/   SKILL.md · interview.md · rules-catalog.md · templates/
-  project-adopt/  SKILL.md · scripts/recon.mjs (+ tests) · templates/takeover-report.md
+  project-init/    SKILL.md · interview.md · rules-catalog.md · templates/
+  project-adopt/   SKILL.md · scripts/recon.mjs (+ tests) · templates/takeover-report.md
   project-onboard/ SKILL.md · scripts/context-pack.mjs (+ tests)
-  adr-new/        SKILL.md
-  project-sync/   SKILL.md · scripts/check-docs.mjs (+ tests)
-install.sh         personal install, or --project <dir> to copy skills into a repository
+  adr-new/         SKILL.md
+  project-sync/    SKILL.md · scripts/check-docs.mjs (+ tests)
+install.sh          personal install, or --project <dir> to copy skills into a repository
 ```

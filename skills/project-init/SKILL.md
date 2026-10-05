@@ -1,6 +1,6 @@
 ---
 name: project-init
-description: Bootstrap the working foundations of a project (new or existing) through an interview — CLAUDE.md, docs/architecture.md, ADR set-up, decisions and lessons logs, PR/issue templates, commit hook, docs check. Use when starting a project, when a repository has no CLAUDE.md or architecture.md, or when the user asks to set up project conventions or documentation. For a substantial existing codebase you are taking over, use project-adopt instead. Produces a minimal v0 and never invents decisions; the project then keeps its documentation alive with the adr-new and project-sync skills.
+description: Bootstrap the working foundations of a new or small project through an interview — brief, CLAUDE.md, docs/architecture.md, ADR set-up, decisions and lessons logs, PR/issue templates, git hooks, docs check. Use when starting a project, when a repository has no CLAUDE.md or architecture.md, or when the user asks to set up project conventions or documentation. For a substantial existing codebase you are taking over, use project-adopt instead. Produces a minimal v0 and never invents decisions; the project then keeps its documentation alive with the adr-new and project-sync skills, and new agents get up to speed with project-onboard.
 ---
 
 # project-init
@@ -28,8 +28,8 @@ cannot be known on day 1 (architecture, most decisions) is recorded later, as it
 6. **Idempotent and non-destructive.** If a target file exists, show what would change and ask;
    never overwrite silently.
 7. **Teach the loop.** The generated `CLAUDE.md` must contain the *Living documentation
-   protocol* so the agent knows it may and should call `adr-new` / `project-sync` and edit docs
-   by itself from then on.
+   protocol* so the agent knows it may and should call `adr-new`, `project-sync` and
+   (for a fresh agent) `project-onboard`, and edit docs by itself from then on.
 
 ## Procedure
 
@@ -60,10 +60,10 @@ Announce the mode in one line when you present the scan, and say the user can as
 - **Quick mode** — the default for a small project (one manifest, about 30 tracked files or
   fewer) or when the user is short on time. Settle everything the repository and the
   *Defaults* table of [rules-catalog.md](rules-catalog.md) can settle, then ask **one round of at
-  most 4 questions**, chosen among the topics with no detectable basis: the purpose and scope (when neither the
-  invocation prompt nor a brief states them), success and team, how work is tracked and
-  reviewed, non-negotiables, commit attribution. Everything else is shown,
-  marked as a default with its reason, in the reflect-back step.
+  most 4 questions**, chosen among the topics with no detectable basis: the purpose and scope
+  (when neither the invocation prompt nor a brief states them), success and team, how work is
+  tracked and reviewed, non-negotiables, commit attribution, cloud or team use. Everything else
+  is shown, marked as a default with its reason, in the reflect-back step.
 - **Thorough mode** — larger projects, or on request. Follow [interview.md](interview.md): phases
   A (context), B (technical), C (process), D (AI rules).
 

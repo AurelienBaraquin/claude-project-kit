@@ -1,6 +1,6 @@
 ---
 name: project-sync
-description: Audit a project's documentation against its code and fix drift — broken links, cited paths that no longer exist, malformed ADRs, architecture.md out of step with the tree, decisions without an ADR, lessons without a safeguard. Use before opening a PR, at the end of a work session, after structural changes, when joining an existing project, or when the user asks whether the docs are up to date.
+description: Audit a project's documentation against its code and fix drift — broken links, cited paths that no longer exist, malformed ADRs, architecture.md or the brief out of step with reality, decisions without an ADR, lessons without a safeguard, vendored skills behind the kit. Use before opening a PR, at the end of a work session, after structural changes, when joining an existing project, or when the user asks whether the docs are up to date.
 ---
 
 # project-sync
@@ -54,6 +54,6 @@ script and the judgement checks.
 ## 4. Boundaries
 
 - Mechanical fixes and factual corrections: do them, in the current change.
-- Anything that changes a *decision*, a *rule* or the *brief*: propose it, and write it through `adr-new` or
-  after the user agrees.
+- Anything that changes a *decision*, a *rule* or the *brief*: propose it, and write it through
+  `adr-new` or after the user agrees.
 - Do not invent documentation for things that do not exist.

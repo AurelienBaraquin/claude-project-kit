@@ -1,6 +1,6 @@
 ---
 name: project-adopt
-description: Take over an existing project you did not write or have not touched for a while — reconstruct what exists from the code and its history, establish a verified health baseline, confirm intent with the user, then set up CLAUDE.md, architecture.md, decision records and the working rules. Use when joining or inheriting a codebase, resuming an old project, or when a repository has substantial code but no map of it. For a new or near-empty project use project-init instead.
+description: Take over an existing project you did not write or have not touched for a while — reconstruct what exists from the code and its history, establish a verified health baseline, confirm intent with the user, then set up the brief, CLAUDE.md, architecture.md, decision records and the working rules. Use when joining or inheriting a codebase, resuming an old project, or when a repository has substantial code but no map of it. For a new or near-empty project use project-init instead.
 ---
 
 # project-adopt
@@ -8,8 +8,8 @@ description: Take over an existing project you did not write or have not touched
 `project-init` looks forward: it sets up foundations for a project that is starting. This skill
 looks **backward**: the code already exists, its authors' intent is gone or forgotten, and you
 must rebuild an accurate picture before anyone changes anything. The output is the same living
-foundation (`CLAUDE.md`, `docs/architecture.md`, decisions, rules) plus a dated snapshot of the
-project's state at takeover.
+foundation (`docs/brief.md`, `CLAUDE.md`, `docs/architecture.md`, decisions, rules) plus a dated
+snapshot of the project's state at takeover.
 
 ## Principles
 
@@ -97,19 +97,22 @@ Ask only what the code cannot say, in rounds of at most 4 questions:
 3. **Rules** — which observed conventions become rules (multi-select, drawn from step 4)?
 4. **Working rules for the agent** — the questions of phase D in
    [../project-init/interview.md](../project-init/interview.md): working mode, always-ask
-   triggers, autonomy, commit and attribution rules. In quick mode, apply the defaults of
+   triggers, autonomy, commit and attribution rules, and whether the project will be used in
+   cloud sessions or by people without the kit. In quick mode, apply the defaults of
    [../project-init/rules-catalog.md](../project-init/rules-catalog.md) and show them for
    correction.
 
 ### 6. Reflect back
-Show what will be written, not a paraphrase: the purpose sentence; the module map; the **brief**
-(purpose, scope, priorities, success criteria); the **exact text of the numbered hard rules** (from the catalogue); the decisions to record and how (ADR
-when the user gave the rationale, log line "rationale unknown" otherwise); the risks and debt;
-the open questions; the files to be created or merged. Wait for validation.
+Show what will be written, not a paraphrase: the module map; the **brief** (purpose, scope,
+priorities, success criteria); the **exact text of the numbered hard rules** (from the
+catalogue); the decisions to record and how (ADR when the user gave the rationale, log line
+"rationale unknown" otherwise); the risks and debt; the open questions; the files to be created
+or merged. Wait for validation.
 
 ### 7. Generate
 Follow the generation step of [../project-init/SKILL.md](../project-init/SKILL.md) (templates,
-catalogue, hooks, merge-never-overwrite), with these specifics:
+catalogue, hooks, vendored skills for cloud or team use, merge-never-overwrite), with these
+specifics:
 
 - **`docs/brief.md`** — from `../project-init/templates/brief.md.tmpl`. Built from the user's
   confirmed answers, never from the code alone: what the code *does today* is described in
@@ -135,7 +138,8 @@ catalogue, hooks, merge-never-overwrite), with these specifics:
 ### 8. Verify
 Run `node scripts/check-docs.mjs`, then the judgement checks of the `project-sync` skill
 (architecture against the tree in particular). Activate the git hooks if they were generated
-(see the hooks step of `project-init`).
+(see the hooks step of `project-init`) and, when cloud or team use was chosen, copy the
+day-to-day skills into the repository (see the skills step of `project-init`).
 
 ### 9. Hand over
 - Do **not** commit unless asked; propose the branch name and a commit message.
