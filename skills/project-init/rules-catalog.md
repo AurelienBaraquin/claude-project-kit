@@ -49,7 +49,7 @@ How to use it:
 | No AI attribution (no commit hook) | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; `.claude/settings.json` disables them. |
 | No AI attribution (with `.githooks/commit-msg`) | Never add `Co-Authored-By` or "Generated with" lines to commits or pull requests; `.claude/settings.json` disables them and `.githooks/commit-msg` rejects them. |
 | Vendored skills (when `.claude/skills/` copies are generated) | The skills in `.claude/skills/` are copies of the claude-project-kit; update them with the kit's `install.sh --project .` and do not edit them in place. |
-| Docs check (when `.githooks/pre-commit` is generated) | The documentation check (`node scripts/check-docs.mjs`) runs before every commit; fix what it reports instead of bypassing it. |
+| Docs check (when `.githooks/pre-commit` is generated) | The documentation check (`node scripts/check-docs.mjs`) runs before every commit, and fails when a surface has no document; fix what it reports instead of bypassing it. |
 | Docs check in CI (when `docs-check.yml` is generated) | The documentation check also runs in CI. |
 | Hook activation (when `.githooks/` is generated) | Enable the git hooks once per clone with `git config core.hooksPath .githooks`; Claude Code refuses `git commit` until they are active. |
 

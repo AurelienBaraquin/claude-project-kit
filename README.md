@@ -69,9 +69,12 @@ third-party service, a code generator — the rule is the same: it goes in `docs
 - `project-init` and `project-adopt` write the documents of the surfaces that already exist, from
   verified facts, and mark what only the owner knows as `Unknown:`. A project with nothing built yet
   gets none: each appears with its surface.
-- `project-sync` checks coverage (a surface with no document), staleness (a document older than
-  the code it covers) and the index. Today these are checks the agent performs, not yet an
-  automated script.
+- **The docs check enforces it.** `scripts/check-docs.mjs` reads the *Covers* column of the
+  `docs/README.md` index. A top-level folder, `Dockerfile`, compose or web-server file, each CI
+  pipeline file, `.env.example`, API contract, schema or migrations folder that no document covers
+  is an **error** (so `pre-commit` and CI fail); a document whose covered paths changed in several
+  commits since it last changed is a **warning** (possibly stale). `project-sync` goes further with
+  what a path cannot show: routes, commands, queues, environment variables, technologies.
 - `adr-new` keeps the technologies document in step when a technology or service is added or
   replaced.
 
@@ -157,7 +160,8 @@ foundation document exists it says so and suggests `project-init` or `project-ad
 Rules that must hold are enforced by mechanisms that travel with the repository:
 
 - `commit-msg` rejects non-conforming commit messages and AI attribution lines;
-- `pre-commit` runs the docs check, so drift is caught the moment it is introduced;
+- `pre-commit` runs the docs check, so drift — including a new surface with no document — is
+  caught the moment it is introduced;
 - `.claude/settings.json` hides AI attribution (when you chose no AI attribution) and wires
   `ensure-git-hooks.sh`, which makes Claude Code refuse `git commit` until `git config core.hooksPath .githooks` has been run in
   that clone (`project-init` runs it once).
@@ -167,10 +171,14 @@ Rules that must hold are enforced by mechanisms that travel with the repository:
 All three are dependency-free (Node ≥ 18) and tested.
 
 - `skills/project-sync/scripts/check-docs.mjs` verifies relative Markdown links, the paths cited
-  in `CLAUDE.md` and `docs/architecture.md`, and ADR numbering and status. Configure it with
-  `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`, `ignorePaths`). `--version` prints its
-  version, and `project-sync` offers to update an older copy in a project. Known limit: a
-  directory cited without a trailing `/` is not checked.
+  in `CLAUDE.md` and `docs/architecture.md`, ADR numbering and status, and the coverage and
+  freshness of the documentation index. Configure it with `.docs-check.json` (`ignore`,
+  `pathDocs`, `adrDir`, `ignorePaths`, `docsIndex`, `coverage`, `coverageIgnore`, `freshness`,
+  `staleAfterCommits`; the two levels take `error`, `warn` or `off`). Coverage and freshness stay
+  inactive until `docs/README.md` has a table with a *Covers* column. `--version` prints its
+  version, and `project-sync` offers to update an older copy in a project. Known limits: a
+  directory cited without a trailing `/` is not checked; coverage recognises surfaces by path
+  only, so an undocumented technology or a route is left to `project-sync`.
 - `skills/project-adopt/scripts/recon.mjs` prints the facts sheet used by `project-adopt`. It
   interprets nothing.
 - `skills/project-onboard/scripts/context-pack.mjs` prints the snapshot used by

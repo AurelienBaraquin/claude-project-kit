@@ -129,7 +129,12 @@ Everything that exists and that someone needs to build, run, test, ship, operate
 project has one document. For each surface of [../project-sync/doc-surfaces.md](../project-sync/doc-surfaces.md)
 whose *Signals* are present in the repository **now**, create its document from verified facts,
 following that surface's *Must contain*, and add its row to `docs/README.md` (*Document*, *What it
-answers*, *Covers*, *Update when*). Keep each short; what you cannot verify becomes `Unknown:` plus
+answers*, *Covers*, *Update when*). **Fill *Covers* with real paths in code spans**, including the
+top-level folders under `architecture.md`: the docs check reads them, and reports as an error any
+top-level folder, `Dockerfile`, compose file, CI pipeline file, `.env.example`, API contract, schema or
+migrations folder that no row covers. The template's own row covers the docs tooling (`scripts/`,
+`docs-check.yml`) that init generates. Paths that truly need no document go in `coverageIgnore` in
+`.docs-check.json`. Keep each short; what you cannot verify becomes `Unknown:` plus
 an open question.
 
 A project with nothing built yet gets none of these: each is created in the change that introduces

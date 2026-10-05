@@ -134,8 +134,10 @@ specifics:
   model, configuration, how to run, tests, CI, deployment, operations, security, user guide,
   technologies and services. Everything the code cannot tell (how it is really deployed, who
   owns an environment, why a service is used) is written as `Unknown:` with who can answer, and
-  recorded as an open question. List every document in the `docs/README.md` index (*Covers* and
-  *Update when* filled). Where a document already exists, check it against the code and correct
+  recorded as an open question. List every document in the `docs/README.md` index with *Covers*
+  (real paths in code spans) and *Update when* filled: the docs check turns any uncovered
+  top-level folder, deployment file, CI pipeline, API contract, schema or migrations folder into an
+  error, so run it and fix what it reports. Where a document already exists, check it against the code and correct
   it instead of rewriting it.
 - **Decisions** — an ADR only where the user supplied the rationale, following the retroactive
   procedure of the `adr-new` skill. Otherwise add to `.assistant/decisions-log.md`:

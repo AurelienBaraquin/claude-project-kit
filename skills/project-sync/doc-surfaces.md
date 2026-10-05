@@ -18,7 +18,8 @@ anything else.
 - Commands are copy-pasteable and were checked against the manifest or run.
 - Keep it under about 200 lines; split by topic when it grows.
 - Add or update its row in `docs/README.md`: *Document*, *What it answers*, *Covers* (the paths
-  it describes, in code spans), *Update when*.
+  it describes, in code spans — `scripts/check-docs.mjs` reads them to check coverage and
+  freshness), *Update when*.
 - Never document something that does not exist. A surface that does not exist yet gets its
   document in the change that introduces it.
 

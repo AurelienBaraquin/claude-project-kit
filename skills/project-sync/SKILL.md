@@ -19,8 +19,13 @@ node scripts/check-docs.mjs
 
 It verifies: relative Markdown links resolve; paths cited in code spans in `CLAUDE.md` and
 `docs/architecture.md` exist; ADRs are numbered without gaps, have a valid `Status`, and
-supersede targets exist. Options go in `.docs-check.json` (`ignore`, `pathDocs`, `adrDir`,
-`ignorePaths`).
+supersede targets exist; and, once `docs/README.md` has a table with a **Covers** column,
+**coverage** (every top-level folder, `Dockerfile`, compose or web-server file, CI pipeline file,
+`.env.example`, API contract, schema and migrations folder is listed in some document's *Covers*
+column — an error) and **freshness** (a document whose covered paths changed in several commits
+since it last changed — a warning). Options go in `.docs-check.json` (`ignore`, `pathDocs`,
+`adrDir`, `ignorePaths`, `docsIndex`, `coverage`, `coverageIgnore`, `freshness`,
+`staleAfterCommits`; the two levels take `error`, `warn` or `off`).
 
 **Is the project's copy current?** Compare `node scripts/check-docs.mjs --version` with
 `node <skill-dir>/scripts/check-docs.mjs --version`. If the project's copy is older, or prints no
@@ -38,8 +43,8 @@ and what each document must contain, are in [doc-surfaces.md](doc-surfaces.md).
 
 | Check | How | Fix |
 |---|---|---|
-| Every surface has a document | List the surfaces present using the *Signals* of [doc-surfaces.md](doc-surfaces.md) (routes, CLI, schema, queues, env vars, tests, CI files, `Dockerfile`/infra, auth, UI, technologies and services the code depends on); check each is covered by a document listed in `docs/README.md` | Write the missing document from verified facts, following the surface's *Must contain*, and add its row to the index. What you cannot verify becomes `Unknown:` with who can answer |
-| Documents are not stale | For each row of `docs/README.md`, compare the date of the last commit touching the document with the last commit touching what it *Covers* (`git log -1 --format=%cd -- <path>`); where the covered paths are newer, read both | Update the document to what the code does now |
+| Every surface has a document | The script already reports the surfaces it recognises by path. Go further: using the *Signals* of [doc-surfaces.md](doc-surfaces.md), look for what a path cannot show — routes and CLI commands, queues, environment variables read, tests, auth, a user interface, technologies and services the code depends on — and check each is covered by a document listed in `docs/README.md` | Write the missing document from verified facts, following the surface's *Must contain*, and add its row (with *Covers* filled) to the index. What you cannot verify becomes `Unknown:` with who can answer. A path that truly needs no document goes in `coverageIgnore` |
+| Documents are not stale | For each "possibly stale" warning, and for index rows with an empty *Covers*, read the document and the code it describes | Update the document to what the code does now; if it was already right, touch nothing and say so |
 | The index is true | Every document under `docs/` (and the other documents the project relies on) has a row; every row's *Covers* and *Update when* are filled and point at paths that exist | Add, correct or remove rows |
 | `docs/brief.md` matches reality | Compare its scope, priorities and success criteria with what is built and with recent decisions in the log; look for features outside the stated scope, in-scope items abandoned, criteria no longer measured | Propose the update to the user; change the brief only once they agree, then record it with `adr-new` |
 | `docs/architecture.md` matches the tree | List top-level folders and the modules/routes/tables/events the doc names; look for new ones it omits and described ones that are gone | Update the doc to what exists — only what exists |
